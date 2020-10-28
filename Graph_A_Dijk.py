@@ -14,7 +14,7 @@ def creating_graph(g):
         """For the loop the inintal node is needed witch is the start_node"""
 
         g.add_edge(dl.line[i].start_node.item[1], dl.line[i].start_node.item[2],
-                   weight=dl.line[i].start_node.item[3], line=dl.line[i].start_node.item[0])
+                   weight=dl.line[i].start_node.item[3], line=dl.line[i].start_node.item[0], Sweight=0)
         n = dl.line[i].start_node
 
         """while loop used to iterate through all the nodes/stations in the tube line, same technique used as 
@@ -25,7 +25,7 @@ def creating_graph(g):
                 break
             else:
 
-                g.add_edge(n.item[1], n.item[2], weight=n.item[3], line=n.item[0])
+                g.add_edge(n.item[1], n.item[2], weight=n.item[3], line=n.item[0], Sweight=0)
                 n = n.next
 
 
@@ -64,11 +64,53 @@ def dijkstra(g, src):
         vised[u] = key
         for e in g.neighbors(u):
             if e not in vised:
-                weight = int(g.get_edge_data(u,e)['weight'])
+                weight = int(g.get_edge_data(u, e)['weight'])
                 if d[u] + weight < d[e]:
                     d[e] = d[u] + weight
+                    g.get_edge_data(u, e)['Sweight'] = d[e]
                     heapq.heappush(heapx, (d[e], e))
-    return d
 
-print(dijkstra(graph, 'Kenton'))
-print(dl.Bakerloo.traversing_the_list())
+'''
+For testing, dw about this
+def shortest(src, des):
+    path = []
+    station = None
+    next = des
+    while next != src:
+        i = float('inf')
+        j=0
+        print(next)
+        for adjacent in graph.neighbors(next):
+            if graph.get_edge_data(next, adjacent)['Sweight'] < i and i != j:
+                i = graph.get_edge_data(next, adjacent)['Sweight']
+                j = i
+                station = adjacent
+                heapq.heappush(path, (graph.get_edge_data(next, adjacent)['Sweight'], station))
+        next = station
+    print(heapq.heappop(path))
+
+dijkstra(graph, 'Kenton')
+shortest('Kenton', 'Bank')
+'''
+
+
+def shortest(src, des):
+    path = []
+    station = None
+    next = des
+    while next != src:
+        i = float('inf')
+        for adjacent in graph.neighbors(next):
+            '''
+            print(adjacent)
+            print(graph.get_edge_data(next, adjacent)['Sweight'])
+            '''
+            if graph.get_edge_data(next, adjacent)['Sweight'] < i and adjacent not in path:
+                i = graph.get_edge_data(next, adjacent)['Sweight']
+                station = adjacent
+        path.append(next)
+        next = station
+    print(path)
+
+dijkstra(graph, 'Kenton')
+shortest('Kenton', 'Bank')
