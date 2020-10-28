@@ -82,32 +82,47 @@ class HeapPriorityQueue(PriorityQueueBase):
 
 
 class AdaptableHeapPriorityQueue(HeapPriorityQueue): #subclass of HeapPriorityQueue
-    '''A locator-based priority queue implemented with a binary heap'''
+    '''A locator-based priority queue implemented with a binary heap.
+        - When operations are performed, and items are relocated
+          within our structure, we reposition the locator instances
+          within the list.
+        - updating the third field of each locator to reflect its new index'''
+
     class Locator(HeapPriorityQueue.Item):
+        ''' The list is a sequence of references to locator instance'''
         __slots__ = '_index' #Adding index as an initial field
 
-        def __init__(self, k, v, j):
+        def __init__(self, k, v, j):# key, value, index
+            ''' 3rd element of each locator instance corresponds to the index
+                of the item within the array'''
             super().__init__(k,v)
             self._index = j
 
     def swap(self, i, j):
+        ''' Overrides swap to record new indices'''
         super().swap(i, j)
         self.data[i]._index = i
         self.data[j]._index = j
 
     def bubble(self, j):
+        ''' Manages the reinstatement of the heap-order property when
+        a key has changed at an arbitrary position within the heap '''
         if j > 0 and self.data[j] < self.data[self.parent(j)]:
+            ''' Depending if the given locator has a parent with a smaller key...'''
             self.upheap(j)
         else:
             self.downheap(j)
 
     def add(self, key, value):
+        ''' The Locator instance is utilised here rather than the original item instance'''
         token = self.Locator(key, value, len(self.data))
         self.data.append(token)
         self.upheap(len(self.data) - 1)
         return token
 
     def update(self, loc, newkey, newval):
+        ''' Performs a more robust checking of validity of a locator
+            compared to prior implementations'''
         j = loc._index
         if not (0 <= j < len(self) and self.data[j] is loc):
             raise ValueError("Invalid Locator")
@@ -116,13 +131,21 @@ class AdaptableHeapPriorityQueue(HeapPriorityQueue): #subclass of HeapPriorityQu
         self.bubble(j)
 
     def remove(self, loc):
+        ''' Remove and return the key value (k,v) pair identified by Locator loc'''
         j = loc._index
         if not (0 <= j < len(self) and self.data[j] is loc):
             raise ValueError("Invalid Locator")
-        if j == len(self) - 1:
+        if j == len(self) - 1: #if item is at the last position
             self.data.pop()
         else:
+<<<<<<< HEAD
             self.swap(j, len(self) - 1)
             self.data.pop()
             self.bubble(j)
         return(loc.key, loc.value)
+=======
+            self.swap(j, len(self) - 1) #Swap item to the last position
+            self.data.pop()   # remove it from the list
+            self.bubble(j)    # Fix item displaced by the swap
+        return(loc.key, loc.value)
+>>>>>>> 7d4cbdea46f35acab896a37ae8172cef87f556a2
