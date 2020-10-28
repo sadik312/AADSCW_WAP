@@ -1,6 +1,6 @@
 import networkx as nx
 import doubly_linked_list as dl
-
+import heapq
 
 """Initiating a graph """
 graph = nx.Graph()
@@ -37,10 +37,38 @@ creating_graph(graph)
 
 """This is the format to extract the data from the graph, obvuiously print is not necessary when just using/redirecting
     the data"""
-# print(graph.get_edge_data('Harrow & Wealdstone', 'Kenton'))
+# print(graph.get_edge_data('Harrow & Wealdstone', 'Kenton')['weight'])
 
 """For the dijkstra algorithm"""
 
 
-def dijkstra():
-    pass
+# print(graph.edges)
+# for i in graph.neighbors('Kenton'):
+#    print(i)
+# print(graph.get_edge_data('Kenton'))
+
+def dijkstra(g, src):
+    d = {}
+    vised = {}
+    heapx = []
+    for vertex in g:
+        if vertex == src:
+            d[vertex] = 0
+        else:
+            d[vertex] = float('inf')
+        heapq.heappush(heapx, (d[vertex], vertex))
+        heapq.heapify(heapx)
+
+    while len(heapx) != 0:
+        key, u = heapq.heappop(heapx)
+        vised[u] = key
+        for e in g.neighbors(u):
+            if e not in vised:
+                weight = int(g.get_edge_data(u,e)['weight'])
+                if d[u] + weight < d[e]:
+                    d[e] = d[u] + weight
+                    heapq.heappush(heapx, (d[e], e))
+    return d
+
+print(dijkstra(graph, 'Kenton'))
+print(dl.Bakerloo.traversing_the_list())
