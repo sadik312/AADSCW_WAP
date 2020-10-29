@@ -1,8 +1,10 @@
 import tkinter
+from PIL import ImageTk, Image
 
 root = tkinter.Tk()
 root.geometry("800x500")
 root.title("Router Planner App")
+#root.iconbitmap()
 
 #entry = tkinter.Entry(root)
 #entry.pack()
@@ -28,6 +30,12 @@ user_input.pack()
 
 button = tkinter.Button(root, text="Enter", command=Confirm)
 button.pack(pady=20)
+
+# new window for Map view:
+
+map_tab = Toplevel()
+map_image = ImageTk.PhotoImage(Image.open("london_underground_map.png"))
+map_label = Label(map_tab, image=map_image).pack()
 
 
             
