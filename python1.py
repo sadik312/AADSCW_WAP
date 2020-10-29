@@ -4,7 +4,8 @@ from PIL import ImageTk, Image
 root = Tk()
 root.title('Route Planner App')
 root.geometry('800x500')
-#root.iconbitmap()
+#root.iconbitmap('train.png') # remember to credit the author 'freepick', 
+#from website: https://www.flaticon.com/authors/freepik
 
 # 'From' Entry box
 def Confirm():
@@ -16,6 +17,8 @@ def Confirm():
 			else:
 				error_label = Label(root, text="both stations not found").pack() 
 
+global confirm_label
+global confirm_label1
 
 user_input = Entry(root)
 user_input.insert(0, "From:")
@@ -27,6 +30,16 @@ user_input1.pack()
 confirm_btn = Button(root, text="Confirm", command=Confirm)
 confirm_btn.pack()
 
+def reset(): 
+	user_input.delete(0, END)
+	user_input1.delete(0, END)
+	user_input.insert(0, "From:")
+	user_input1.insert(0, "To: ")
+	confirm_label.delete(0, END)
+	
+
+reset_btn = Button(root, text="Reset", command=reset)
+reset_btn.pack()
 
 # INCLUDE A REFRESH BUTTON
 
