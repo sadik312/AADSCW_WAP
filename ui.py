@@ -32,10 +32,13 @@ button = tkinter.Button(root, text="Enter", command=Confirm)
 button.pack(pady=20)
 
 # new window for Map view:
+def map_page():
+	map_tab = Toplevel()
+	map_image = ImageTk.PhotoImage(Image.open("london_underground_map.png"))
+	map_label = Label(map_tab, image=map_image).pack()
 
-map_tab = Toplevel()
-map_image = ImageTk.PhotoImage(Image.open("london_underground_map.png"))
-map_label = Label(map_tab, image=map_image).pack()
+map_btn = tkinter.Button(root, text="Map", command=map_page)
+map_btn.pack(pady=25)
 
 
             
