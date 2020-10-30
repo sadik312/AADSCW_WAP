@@ -16,9 +16,7 @@ def Confirm():
 			
 			else:
 				error_label = Label(root, text="both stations not found").pack() 
-
-global confirm_label
-global confirm_label1
+				
 
 user_input = Entry(root)
 user_input.insert(0, "From:")
@@ -65,5 +63,4 @@ exit_btn.pack()
 
 
 mainloop()
-
 
