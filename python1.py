@@ -4,7 +4,7 @@ from PIL import ImageTk, Image
 root = Tk()
 root.title('Route Planner App')
 root.geometry('800x500')
-#root.iconbitmap('train.png') # remember to credit the author 'freepick', 
+root.iconbitmap('train.png') # remember to credit the author 'freepick', 
 #from website: https://www.flaticon.com/authors/freepik
 
 # 'From' Entry box
@@ -50,9 +50,12 @@ def map_page():
 	map_img = ImageTk.PhotoImage(Image.open("london_underground_map.png"))
 	map_label = Label(map_tab, image=map_img)
 	map_label.pack()
+	exit_btn1 = Button(map_tab, text="Exit map", command=map_tab.quit)
+	exit_btn1.pack()
 
 map_btn = Button(root, text="Map", command=map_page)
 map_btn.pack()
+
 
 # Exit button: 
 exit_btn = Button(root, text="Exit", command=root.quit)
