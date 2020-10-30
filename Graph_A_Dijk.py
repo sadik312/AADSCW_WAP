@@ -1,6 +1,7 @@
 import networkx as nx
 import doubly_linked_list as dl
 import heapq
+from datetime import datetime, time
 
 """Initiating a graph """
 graph = nx.Graph()
@@ -68,10 +69,6 @@ def dijkstra(g, src):
                     g.nodes[e]['cum_wg'] = d[e]
                     heapq.heappush(heapx, (d[e], e))
 
-
-print(dijkstra(graph, 'Kenton'))
-
-
 '''
 For testing, dw about this
 def shortest(src, des):
@@ -130,7 +127,17 @@ def display():
             temp = path[-1]
             print('\t- ' + path.pop(-1)[0])
 
+def in_time(startTime, endTime, time = None):
+    time = datetime.utcnow().time()
+    if startTime < endTime:
+        return time >= startTime and time <= endTime
+    else:
+        return time >= startTime or time <= endTime
 
-dijkstra(graph, 'Edgware')
-shortest('Edgware', 'Morden ')
-display()
+def main():
+    if in_time(time(5,00), time(0)) == True: # 5AM -> MIDNIGHT
+        dijkstra(graph, 'Edgware')
+        shortest('Edgware', 'Morden ')
+        display()
+
+main()
