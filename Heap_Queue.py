@@ -138,14 +138,8 @@ class AdaptableHeapPriorityQueue(HeapPriorityQueue): #subclass of HeapPriorityQu
         if j == len(self) - 1: #if item is at the last position
             self.data.pop()
         else:
-<<<<<<< HEAD
             self.swap(j, len(self) - 1)
             self.data.pop()
             self.bubble(j)
         return(loc.key, loc.value)
-=======
-            self.swap(j, len(self) - 1) #Swap item to the last position
-            self.data.pop()   # remove it from the list
-            self.bubble(j)    # Fix item displaced by the swap
-        return(loc.key, loc.value)
->>>>>>> 7d4cbdea46f35acab896a37ae8172cef87f556a2
+
