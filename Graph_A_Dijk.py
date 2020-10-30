@@ -127,17 +127,26 @@ def display():
             temp = path[-1]
             print('\t- ' + path.pop(-1)[0])
 
-def in_time(startTime, endTime, time = None):
-    time = datetime.utcnow().time()
+def in_time(startTime, endTime, cur_time = None):
+    #Current Universal Time
+    cur_time = datetime.utcnow().time()
     if startTime < endTime:
-        return time >= startTime and time <= endTime
+        # The Current Time falls within the 
+        return cur_time >= startTime and cur_time <= endTime
     else:
-        return time >= startTime or time <= endTime
+        # The 'or' takes into account if the period spans overnight
+        return cur_time >= startTime or cur_time <= endTime
+
+
 
 def main():
+    ''' Check if User is Accessing the Application within train running periods'''
     if in_time(time(5,00), time(0)) == True: # 5AM -> MIDNIGHT
+        ''' Call upon GUI'''
+        ''' Get input and insert into Dijkstra's Algorithm'''
         dijkstra(graph, 'Edgware')
         shortest('Edgware', 'Morden ')
+        ''' Display within the GUI'''
         display()
 
 main()
