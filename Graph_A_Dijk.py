@@ -3,7 +3,6 @@ import doubly_linked_list as dl
 import networkx as nx
 import heapq
 
-
 """Initiating a graph """
 graph = nx.Graph()
 
@@ -33,9 +32,6 @@ def creating_graph(g):
                 n = n.next
 
 
-
-
-
 """This is how the data is stored as list in the nodes for each tube line, obviously print is not necessary"""
 # print(dl.Bakerloo.traversing_the_list())
 
@@ -48,8 +44,8 @@ def creating_graph(g):
 
 def dijkstra(g, src):
     d = {}
-    vised = {}  #Maps the Visited Vertices to its 'distance to vertex' value
-    heapx = []  #Holds Heap within Array Format
+    vised = {}  # Maps the Visited Vertices to its 'distance to vertex' value
+    heapx = []  # Holds Heap within Array Format
     for vertex in g:
         if vertex == src:
             ''' As there are no values present within the Heap,
@@ -60,10 +56,9 @@ def dijkstra(g, src):
             ''' All other Vertex's having a value of 'positive infinity' '''
             d[vertex] = float('inf')
         heapq.heappush(heapx, (d[vertex], vertex))
-        heapq.heapify
+        heapq.heapify(heapx)
         ''' The heapify function is needed to retain heap order
             - Containing actions such as Bubbling up-heap or down-heap'''
-
 
     ''' This loop encompasses the 'Relaxation step' found within all Dijkstra's Algorithm's'''
     while len(heapx) != 0:
@@ -81,33 +76,10 @@ def dijkstra(g, src):
                     ''' Pushing updated distances onto heap'''
                     heapq.heappush(heapx, (d[e], e))
 
-'''
-For testing, dw about this
-def shortest(src, des):
-    path = []
-    station = None
-    next = des
-    while next != src:
-        i = float('inf')
-        j=0
-        print(next)
-        for adjacent in graph.neighbors(next):
-            if graph.get_edge_data(next, adjacent)['Sweight'] < i and i != j:
-                i = graph.get_edge_data(next, adjacent)['Sweight']
-                j = i
-                station = adjacent
-                heapq.heappush(path, (graph.get_edge_data(next, adjacent)['Sweight'], station))
-        next = station
-    print(heapq.heappop(path))
 
-dijkstra(graph, 'Kenton')
-shortest('Kenton', 'Bank')
-'''
 path = []
-<<<<<<< HEAD
 '''path has tuple with format: (station, line, cum_wg)'''
-=======
->>>>>>> bb76609a573aa35ff228ff961beb1666eaf4d615
+
 
 def shortest(src, des):
     station = None
@@ -142,12 +114,7 @@ def display():
             temp = path[-1]
             print('\t- ' + path.pop(-1)[0])
 
-<<<<<<< HEAD
-dijkstra(graph, 'Edgware')
-shortest('Edgware', 'Morden ')
-display()
 
-=======
 def in_time(startTime, endTime):
     '''Current Universal Time'''
     cur_time = datetime.utcnow().time()
@@ -159,10 +126,9 @@ def in_time(startTime, endTime):
         return cur_time >= startTime or cur_time <= endTime
 
 
-
 def main():
     ''' Check if User is Accessing the Application within train running periods'''
-    if in_time(time(5,00), time(0)) == True: # 5AM -> MIDNIGHT
+    if in_time(time(5, 00), time(0)):  # 5AM -> MIDNIGHT
         ''' Call upon GUI'''
         """Function creating the graph"""
         creating_graph(graph)
@@ -172,5 +138,5 @@ def main():
         ''' Display within the GUI'''
         display()
 
+
 main()
->>>>>>> bb76609a573aa35ff228ff961beb1666eaf4d615
