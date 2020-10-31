@@ -16,7 +16,7 @@ class Node:
 
 
 class Doubly_linked_List:
-    """The staring node is start_node where initially is assigned None when the list is empty"""
+    """The starting node is start_node where initially is assigned None when the list is empty"""
 
     def __init__(self):
         self.start_node = None
@@ -194,7 +194,6 @@ def create(file):
             if line[row[0]].start_node is None:
                 line[row[0]].inserting_at_start(row)
             else:
-
                 line[row[0]].inserting_at_end(row)
             """Ignore this : cond = (temp[2] != row[1] and temp[2] != '') and row[1] == temp[1]"""
             _cond = (_temp[2] != row[1] and _temp[2] != '')
@@ -204,7 +203,6 @@ def create(file):
             _temp = row
             """Assigning the current row to _temp"""
     f.close()
-
 
 '''calling the function to initiate'''
 create('London Underground data.csv')
