@@ -78,10 +78,6 @@ def dijkstra(g, src):
 
 
 path = []
-<<<<<<< HEAD
-=======
-
->>>>>>> d78d5cafff6ddd57cd9b1bd6528755350dc358b2
 '''path has tuple with format: (station, line, cum_wg)'''
 
 
@@ -118,10 +114,7 @@ def display():
             temp = path[-1]
             print('\t- ' + path.pop(-1)[0])
 
-<<<<<<< HEAD
 
-=======
->>>>>>> d78d5cafff6ddd57cd9b1bd6528755350dc358b2
 def in_time(startTime, endTime):
     '''Current Universal Time'''
     cur_time = datetime.utcnow().time()
@@ -147,7 +140,4 @@ def main():
 
 
 main()
-<<<<<<< HEAD
-=======
 
->>>>>>> d78d5cafff6ddd57cd9b1bd6528755350dc358b2
