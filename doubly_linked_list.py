@@ -151,6 +151,19 @@ class Doubly_linked_List:
             else:
                 print("Item not found")
 
+    def last_element(self):
+        n = self.start_node
+        while n is not None:
+            if n.next is None:
+                return n.item
+            n = n.next
+    def next_item(self, station):
+        n = self.start_node
+        while n is not None:
+            if n.item == station:  # Finding node x
+                break
+            n = n.next
+        return n.next.item
 
 """
 Creating instances of linked list for each line
