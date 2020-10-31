@@ -92,7 +92,7 @@ dijkstra(graph, 'Kenton')
 shortest('Kenton', 'Bank')
 '''
 path = []
-
+'''path has tuple with format: (station, line, cum_wg)'''
 
 def shortest(src, des):
     station = None
@@ -127,7 +127,7 @@ def display():
             temp = path[-1]
             print('\t- ' + path.pop(-1)[0])
 
-
 dijkstra(graph, 'Edgware')
 shortest('Edgware', 'Morden ')
 display()
+

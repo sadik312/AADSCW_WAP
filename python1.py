@@ -1,6 +1,0 @@
-print("COMP1828CW")
-print("hello world")
-print("Testing")
-print("Laptop")
-print("this is truly a madness")
-print("Yankee wid no BRIMMMMM")
