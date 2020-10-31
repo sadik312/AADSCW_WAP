@@ -96,6 +96,7 @@ def shortest(src, des):
 		next = station
 
 	graph.nodes[next]['line'] = graph.get_edge_data(src, path[-1][0])['line']
+	print(path)
 	path.append((src, graph.nodes[next]['line'], graph.nodes[src]['cum_wg']))
 
 
