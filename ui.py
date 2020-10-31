@@ -52,6 +52,7 @@ def main():
 
 
 def Confirm():
+<<<<<<< HEAD
 	source = words(src_input.get().lower().strip())
 	destination = words(des_input.get().lower().strip())
 
@@ -72,6 +73,22 @@ def Confirm():
 			# input for starting station
 src_input = Entry(root)
 src_input.insert(0, "Morden")
+=======
+	with open ('stations.txt', 'r') as file:
+			if src_input.get() and user_input1.get() in file.read():
+				confirm_label = Label(root, text="Starting Station: " + src_input.get())
+				confirm_label.pack()
+				confirm_label1 = Label(root, text="Destination Station: " + user_input1.get())
+				confirm_label1.pack()
+			
+			else:
+				error_label = Label(root, text="both stations not found")
+				error_label.pack() 
+				
+# input for starting station
+src_input = Entry(root)
+src_input.insert(0, "From:")
+>>>>>>> 5b3a4aa2d8cf7e68379e09e64eb0cf1d08be1c19
 src_input.pack()
 
 
@@ -87,9 +104,15 @@ confirm_btn.pack()
 # resets entry boxes, but not the station confirmations (can't seem to get that to work)
 def reset(): 
 	src_input.delete(0, END)
+<<<<<<< HEAD
 	des_input.delete(0, END)
 	src_input.insert(0, "From:")
 	des_input.insert(0, "To: ")
+=======
+	user_input1.delete(0, END)
+	src_input.insert(0, "From:")
+	user_input1.insert(0, "To: ")
+>>>>>>> 5b3a4aa2d8cf7e68379e09e64eb0cf1d08be1c19
 	#confirm_label.delete(0, END)
 	
 
