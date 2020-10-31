@@ -55,8 +55,8 @@ root.geometry('800x500')
 # func to confirm entered stations
 def Confirm():
 	with open ('stations.txt', 'r') as file:
-			if user_input.get() and user_input1.get() in file.read():
-				confirm_label = Label(root, text="Starting Station: " + user_input.get())
+			if src_input.get() and user_input1.get() in file.read():
+				confirm_label = Label(root, text="Starting Station: " + src_input.get())
 				confirm_label.pack()
 				confirm_label1 = Label(root, text="Destination Station: " + user_input1.get())
 				confirm_label1.pack()
@@ -66,9 +66,9 @@ def Confirm():
 				error_label.pack() 
 				
 # input for starting station
-user_input = Entry(root)
-user_input.insert(0, "From:")
-user_input.pack()
+src_input = Entry(root)
+src_input.insert(0, "From:")
+src_input.pack()
 
 
 # input for destination station
@@ -82,9 +82,9 @@ confirm_btn.pack()
 
 # resets entry boxes, but not the station confirmations (can't seem to get that to work)
 def reset(): 
-	user_input.delete(0, END)
+	src_input.delete(0, END)
 	user_input1.delete(0, END)
-	user_input.insert(0, "From:")
+	src_input.insert(0, "From:")
 	user_input1.insert(0, "To: ")
 	#confirm_label.delete(0, END)
 	
