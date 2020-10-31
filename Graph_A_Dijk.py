@@ -141,11 +141,6 @@ def display():
             temp = path[-1]
             print('\t- ' + path.pop(-1)[0])
 
-
-dijkstra(graph, 'Edgware')
-shortest('Edgware', 'Morden ')
-display()
-
 def in_time(startTime, endTime):
     '''Current Universal Time'''
     cur_time = datetime.utcnow().time()
