@@ -71,7 +71,7 @@ def dijkstra(g, src):
 				''' Relaxation step on edges (e, u)'''
 				'''is the accumulated value better than d[e]'''
 				if d[u] + weight < d[e]:
-					d[e] = d[u] + weight
+					d[e] = d[u] + weight + 1
 					g.nodes[e]['cum_wg'] = d[e]
 					''' Pushing updated distances onto heap'''
 					heapq.heappush(heapx, (d[e], e))
@@ -96,9 +96,7 @@ def shortest(src, des):
 		next = station
 
 	graph.nodes[next]['line'] = graph.get_edge_data(src, path[-1][0])['line']
-	print(path)
 	path.append((src, graph.nodes[next]['line'], graph.nodes[src]['cum_wg']))
-
 
 def display():
 	temp = None
