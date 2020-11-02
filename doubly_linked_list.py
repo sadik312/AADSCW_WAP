@@ -95,15 +95,20 @@ class Doubly_linked_List:
 
     def traversing_the_list(self):
         tracker = 0
+        stations = []
         if self.start_node is None:
             print("the list is empty")
+            stations.append(n.item[1].strip())
         else:
             n = self.start_node
             while n is not None:
                 tracker = tracker + 1
-                print(n.item)
+                stations.append(n.item[1].strip())
+                if n.next is None:
+                    stations.append(n.item[2].strip())
                 n = n.next
-            return tracker
+
+            return stations
 
     def deleting_at_start(self):
         if self.start_node is None:
@@ -212,7 +217,8 @@ def create(file):
             _cond = (_temp[2] != row[1] and _temp[2] != '')
             """Cond is used to get resolve either TRUE or FALSE for the next if statement """
             if _cond:
-                line[_temp[0]].inserting_at_end(_temp)
+                #line[_temp[0]].inserting_at_end(_temp)
+                pass
             _temp = row
             """Assigning the current row to _temp"""
     f.close()

@@ -29,9 +29,9 @@ def words(string):
         return string.capitalize()
 
 
+cur_time = datetime.utcnow().time()
 def in_time(startTime, endTime):
     '''Current Universal Time'''
-    cur_time = datetime.utcnow().time()
     if startTime < endTime:
         ''' The Current Time falls within the '''
         return cur_time >= startTime and cur_time <= endTime
@@ -40,7 +40,7 @@ def in_time(startTime, endTime):
         return cur_time >= startTime or cur_time <= endTime
 
 
-def Confirm():
+def confirm():
     global source
     global destination
     source = words(src_input.get().lower().strip())
@@ -67,6 +67,7 @@ def main():
         ''' Call upon GUI'''
         ''' Get input and insert into Dijkstra's Algorithm'''
         gr.dijkstra(gr.graph, source)
+        gr.spec_bakerloo()
         gr.shortest(source, destination)
         gr.display()
         ''' Display within the GUI'''
@@ -84,7 +85,7 @@ des_input.insert(0, "To:")
 des_input.pack()
 
 # button to confirm station entries
-confirm_btn = Button(root, text="Confirm", command=Confirm)
+confirm_btn = Button(root, text="Confirm", command=confirm)
 confirm_btn.pack()
 
 
