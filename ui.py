@@ -9,6 +9,10 @@ root.geometry('800x500')
 """ root.iconbitmap('train.png') # remember to credit the author 'freepick',
  from website: https://www.flaticon.com/authors/freepik """
 
+confirm_label = Label(root)
+confirm_label1 = Label(root)
+error_label = Label(root)
+
 # func to confirm entered stations
 source = None
 destination = None
@@ -44,6 +48,13 @@ def in_time(startTime, endTime):
 def confirm():
     global source
     global destination
+    global confirm_label
+    global confirm_label1
+    global error_label
+    confirm_label.destroy()
+    confirm_label1.destroy()
+    error_label.destroy()
+
     source = words(src_input.get().lower().strip())
     destination = words(des_input.get().lower().strip())
 
@@ -58,8 +69,8 @@ def confirm():
             error_label = Label(root, text="Destination not found")
             error_label.pack()
     else:
-        error_label = Label(root, text="Starting station not found")
-        error_label.pack()
+        error_label = Label(root, text="Starting station not found")	###
+        error_label.pack()												###
 
 
 def main():
@@ -97,6 +108,10 @@ def reset():
     des_input.delete(0, END)
     src_input.insert(0, "From:")
     des_input.insert(0, "To: ")
+    confirm_label.pack_forget() 		###
+    confirm_label1.pack_forget() 		###
+    error_label.pack_forget() 			###
+
 
 
 """ confirm_label.delete(0, END)"""
