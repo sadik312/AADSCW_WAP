@@ -26,8 +26,8 @@ def creating_graph(g):
             if n.next is None:
                 break
             else:
-                g.add_node(n.item[1].strip(), cum_wg=None, line=n.item[0])
-                g.add_node(n.item[2].strip(), cum_wg=None, line=n.item[0])
+                g.add_node(n.item[1].strip(), cum_wg=None, line=[n.item[0]])
+                g.add_node(n.item[2].strip(), cum_wg=None, line=[n.item[0]])
                 g.add_edge(n.item[1].strip(), n.item[2].strip(), weight=n.item[3], line=n.item[0])
                 n = n.next
 
@@ -102,6 +102,22 @@ def shortest(src, des):
 cur_time = datetime.utcnow().time()
 
 
+def cum_time(time, add_on):
+    time = str(time)[:5]
+    hours = int(time[:2])
+    minutes = int(time[3:])
+    minutes = minutes + add_on
+    if minutes // 60 > 0:
+        hours = hours + (minutes // 60)
+        rem_min = (minutes / 60) - (minutes // 60)
+        minutes = int(60 * rem_min)
+
+    if minutes < 10:
+        minutes = '0'+ str(minutes)
+    final = "{}:{}".format(hours, minutes)
+    return final
+
+
 def spec_bakerloo():
     cond = (time(9, 00) <= cur_time <= time(16, 00)) or (time(19, 00) <= cur_time <= time(0))
     if cond:
@@ -109,27 +125,24 @@ def spec_bakerloo():
             graph.nodes[vertices]['cum_wg'] = (((graph.nodes[vertices]['cum_wg'] - 1) / 2) + 1)
 
 
-
-
 def display():
     temp = None
     while len(path) != 0:
         if temp is None:
             temp = path[-1]
-            print(path[-1][1])
+            print(path[-1][1] + ' ' + str(cur_time)[:5])
             print('\t- ' + path.pop(-1)[0])
         if temp[1] != path[-1][1]:
-            if temp[2] is None:
-                pass
-            else:
-                print(str(path[-1][1]) + ' ' + str(temp[2]))
+            if temp[2] is not None:
+                print(str(path[-1][1]) + ' ' + str(cum_time(cur_time, int(temp[2]))))
             temp = path[-1]
             print('\t- ' + path.pop(-1)[0])
         else:
             temp = path[-1]
             print('\t- ' + path.pop(-1)[0])
-    print('Total time: {}'.format(temp[2]))
+    print('Total time: {}'.format(cum_time(cur_time, int(temp[2]))))
 
 
 """Function creating the graph"""
 creating_graph(graph)
+

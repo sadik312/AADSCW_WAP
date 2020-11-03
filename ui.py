@@ -6,8 +6,8 @@ import Graph_A_Dijk as gr
 root = Tk()
 root.title('Route Planner App')
 root.geometry('800x500')
-# root.iconbitmap('train.png') # remember to credit the author 'freepick',
-# from website: https://www.flaticon.com/authors/freepik
+""" root.iconbitmap('train.png') # remember to credit the author 'freepick',
+ from website: https://www.flaticon.com/authors/freepik """
 
 # func to confirm entered stations
 source = None
@@ -19,10 +19,9 @@ def words(string):
         newText = ''
         wap = string.split(' ')
         for val in wap:
-            # Remove space from starting and ending
+            ''' Remove space from starting and ending'''
             val = val.strip()
-
-            # Capitalize each list item and merge with '.'
+            ''' Capitalize each list item and merge with '.' '''
             newText += val.capitalize() + ' '
         return newText.strip()
     else:
@@ -30,11 +29,13 @@ def words(string):
 
 
 cur_time = datetime.utcnow().time()
+
+
 def in_time(startTime, endTime):
-    '''Current Universal Time'''
+    """Current Universal Time"""
     if startTime < endTime:
         ''' The Current Time falls within the '''
-        return cur_time >= startTime and cur_time <= endTime
+        return startTime <= cur_time <= endTime
     else:
         ''' The 'or' takes into account if the period spans overnight'''
         return cur_time >= startTime or cur_time <= endTime
@@ -62,7 +63,7 @@ def confirm():
 
 
 def main():
-    ''' Check if User is Accessing the Application within train running periods'''
+    """ Check if User is Accessing the Application within train running periods"""
     if in_time(time(5, 00), time(0)):  # 5AM -> MIDNIGHT
         ''' Call upon GUI'''
         ''' Get input and insert into Dijkstra's Algorithm'''
@@ -73,23 +74,24 @@ def main():
         ''' Display within the GUI'''
 
 
-# input for starting station
+""" input for starting station"""
 
 src_input = Entry(root)
 src_input.insert(0, "From:")
 src_input.pack()
 
-# input for destination station
+""" input for destination station"""
 des_input = Entry(root)
 des_input.insert(0, "To:")
 des_input.pack()
 
-# button to confirm station entries
+""" button to confirm station entries"""
 confirm_btn = Button(root, text="Confirm", command=confirm)
 confirm_btn.pack()
 
+""" resets entry boxes, but not the station confirmations (can't seem to get that to work)"""
 
-# resets entry boxes, but not the station confirmations (can't seem to get that to work)
+
 def reset():
     src_input.delete(0, END)
     des_input.delete(0, END)
@@ -97,14 +99,14 @@ def reset():
     des_input.insert(0, "To: ")
 
 
-# confirm_label.delete(0, END)
-
+""" confirm_label.delete(0, END)"""
 
 reset_btn = Button(root, text="Reset", command=reset)
 reset_btn.pack()
 
+""" Button that will open up TFL Map"""
 
-# Button that will open up TFL Map
+
 def map_page():
     global map_img
     map_tab = Toplevel()
@@ -117,7 +119,7 @@ def map_page():
 map_btn = Button(root, text="Map", command=map_page)
 map_btn.pack()
 
-# Exit button:
+""" Exit button:"""
 exit_btn = Button(root, text="Exit", command=root.quit)
 exit_btn.pack()
 
