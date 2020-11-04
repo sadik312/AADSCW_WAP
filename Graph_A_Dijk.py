@@ -11,10 +11,19 @@ def creating_graph(g):
     """The for loop below will loop for all the values in line dict created in 'doubly_linked_list.py'
         adding edges by iterating through every node in the line"""
     for i in dl.line:
-
+        if dl.line[i].start_node.item[1].strip() in g.nodes():
+            if i not in g.nodes[dl.line[i].start_node.item[1].strip()]['line']:
+                g.nodes[dl.line[i].start_node.item[1].strip()]['line'].append(i)
+        else:
+            g.add_node(dl.line[i].start_node.item[1].strip(), cum_wg=None, line=[dl.line[i].start_node.item[0]])
         """For the loop the inintal node is needed witch is the start_node"""
-        g.add_node(dl.line[i].start_node.item[1].strip(), cum_wg=None, line=dl.line[i].start_node.item[0])
-        g.add_node(dl.line[i].start_node.item[2].strip(), cum_wg=None, line=dl.line[i].start_node.item[0])
+
+        if dl.line[i].start_node.item[2].strip() in g.nodes():
+            if i not in g.nodes[dl.line[i].start_node.item[2].strip()]['line']:
+                g.nodes[dl.line[i].start_node.item[2].strip()]['line'].append(i)
+        else:
+            g.add_node(dl.line[i].start_node.item[2].strip(), cum_wg=None, line=[dl.line[i].start_node.item[0]])
+
         g.add_edge(dl.line[i].start_node.item[1].strip(), dl.line[i].start_node.item[2].strip(),
                    weight=dl.line[i].start_node.item[3], line=dl.line[i].start_node.item[0])
         n = dl.line[i].start_node
@@ -23,13 +32,19 @@ def creating_graph(g):
             doubly linked list to traverse the list. 
             Making a variable n and assigning it to start_node will allow to traverse through the list"""
         while n is not None:
-            if n.next is None:
-                break
+            if n.item[1].strip() in g.nodes():
+                if i not in g.nodes[n.item[1].strip()]['line']:
+                    g.nodes[n.item[1].strip()]['line'].append(i)
             else:
                 g.add_node(n.item[1].strip(), cum_wg=None, line=[n.item[0]])
+
+            if n.item[2].strip() in g.nodes():
+                if i not in g.nodes[n.item[2].strip()]['line']:
+                    g.nodes[n.item[2].strip()]['line'].append(i)
+            else:
                 g.add_node(n.item[2].strip(), cum_wg=None, line=[n.item[0]])
-                g.add_edge(n.item[1].strip(), n.item[2].strip(), weight=n.item[3], line=n.item[0])
-                n = n.next
+            g.add_edge(n.item[1].strip(), n.item[2].strip(), weight=n.item[3], line=n.item[0])
+            n = n.next
 
 
 """This is how the data is stored as list in the nodes for each tube line, obviously print is not necessary"""
@@ -78,7 +93,9 @@ def dijkstra(g, src):
 
 
 path = []
-'''path has tuple with format: (station, line, cum_wg)'''
+'''path has tuple with format: (station, line, cum_wg)
+    we could make this path a stack 
+    doing this would decrease the time complexity '''
 
 
 def shortest(src, des):
@@ -96,7 +113,9 @@ def shortest(src, des):
         next = station
 
     graph.nodes[next]['line'] = graph.get_edge_data(src, path[-1][0])['line']
-    path.append((src, graph.nodes[next]['line'], graph.nodes[src]['cum_wg']))
+    path.append((src, [graph.nodes[next]['line']], graph.nodes[src]['cum_wg']))
+    #print(path)
+    path.reverse()
 
 
 cur_time = datetime.utcnow().time()
@@ -113,7 +132,7 @@ def cum_time(time, add_on):
         minutes = int(60 * rem_min)
 
     if minutes < 10:
-        minutes = '0'+ str(minutes)
+        minutes = '0' + str(minutes)
     final = "{}:{}".format(hours, minutes)
     return final
 
@@ -125,12 +144,17 @@ def spec_bakerloo():
             graph.nodes[vertices]['cum_wg'] = (((graph.nodes[vertices]['cum_wg'] - 1) / 2) + 1)
 
 
+'''final in form (station, [line], cum_wg)'''
+
+''' just incase other display breaks
 def display():
+
+    print(path_finder())
     temp = None
     while len(path) != 0:
         if temp is None:
             temp = path[-1]
-            print(path[-1][1] + ' ' + str(cur_time)[:5])
+            print(str(path[-1][1]) + ' ' + str(cur_time)[:5])
             print('\t- ' + path.pop(-1)[0])
         if temp[1] != path[-1][1]:
             if temp[2] is not None:
@@ -141,8 +165,52 @@ def display():
             temp = path[-1]
             print('\t- ' + path.pop(-1)[0])
     print('Total time: {}'.format(cum_time(cur_time, int(temp[2]))))
-
+'''
 
 """Function creating the graph"""
 creating_graph(graph)
+
+final = []
+def path_finder():
+    temp = None
+    temp2 = None
+    compare = None
+    for i in range(len(path)):
+        temp = set(path[i][1])
+        if i == 1:
+            compare = temp
+        else:
+            if compare is not None:
+                if compare & temp2 == set():
+                    compare = temp2 & temp
+                else:
+                    compare = compare & temp2
+        #print(compare)
+        if compare is not None:
+            final.append((path[i][0], list(compare), path[i][2]))
+        else:
+            hanger = set(path[i][1]) & set(path[i+1][1])
+            final.append((path[i][0], list(hanger), path[i][2]))
+        temp2 = set(path[i][1])
+    #print(final)
+
+def display():
+    path_finder()
+    temp = None
+    line_cur = None
+    for i in final:
+        if i == 0:
+            temp = i
+            line_cur = i[1]
+            print(i[1] + ' ' + str(cur_time)[:5])
+        if line_cur == i[1]:
+            temp = i
+            print(('\t- ' + i[0]))
+        else:
+            temp = i
+            line_cur = i[1]
+            print(str(i[1]) + ' ' + str(cum_time(cur_time, int(temp[2]))))
+            print('\t- ' + i[0])
+    print('Total time: {}'.format(cum_time(cur_time, int(temp[2]))))
+    #print(final)
 
