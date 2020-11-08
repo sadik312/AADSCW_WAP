@@ -60,13 +60,16 @@ def creating_graph(g):
 def dijkstra(g, src):
     d = {}
     vised = {}  # Maps the Visited Vertices to its 'distance to vertex' value
+    pred = {}
     heapx = []  # Holds Heap within Array Format
     for vertex in g:
+        pred[vertex] = vertex
         if vertex == src:
             ''' As there are no values present within the Heap,
             The first Vertex will be initiated as the 'root' '''
             d[vertex] = 0
             g.nodes[vertex]['cum_wg'] = 0
+            heapq.heappush(heapx, (d[vertex], vertex))
         else:
             ''' All other Vertex's having a value of 'positive infinity' '''
             d[vertex] = float('inf')
@@ -76,7 +79,7 @@ def dijkstra(g, src):
             - Containing actions such as Bubbling up-heap or down-heap'''
 
     ''' This loop encompasses the 'Relaxation step' found within all Dijkstra's Algorithm's'''
-    while len(heapx) != 0:
+    while heapx:
         key, u = heapq.heappop(heapx)
         vised[u] = key
         ''' For all the outgoing/neighbouring edges '''
@@ -90,6 +93,8 @@ def dijkstra(g, src):
                     g.nodes[e]['cum_wg'] = d[e]
                     ''' Pushing updated distances onto heap'''
                     heapq.heappush(heapx, (d[e], e))
+                    pred[e] = u
+    return pred
 
 
 path = []
@@ -98,24 +103,16 @@ path = []
     doing this would decrease the time complexity '''
 
 
-def shortest(src, des):
-    station = None
-    next = des
-    # heapq.heappush(path, (graph.nodes[src]['cum_wg'], src))
-    while next != src:
-        i = float('inf')
-        for adjacent in graph.neighbors(next):
-            if graph.nodes[adjacent]['cum_wg'] < i:
-                i = graph.nodes[adjacent]['cum_wg']
-                station = adjacent
-        # heapq.heappush(path, (graph.nodes[next]['cum_wg'], next))
-        path.append((next, graph.nodes[next]['line'], graph.nodes[next]['cum_wg']))
-        next = station
-
-    graph.nodes[next]['line'] = graph.get_edge_data(src, path[-1][0])['line']
-    path.append((src, [graph.nodes[next]['line']], graph.nodes[src]['cum_wg']))
-    #print(path)
-    path.reverse()
+def shortest2(g, s, d):
+    pred = dijkstra(g, s)
+    node = d
+    short = []
+    while True:
+        short.append((node, graph.nodes[node]['line'], graph.nodes[node]['cum_wg']))
+        if node == pred[node]:
+            break
+        node = pred[node]
+    return short[::-1]
 
 
 cur_time = datetime.utcnow().time()
@@ -133,8 +130,8 @@ def cum_time(time, add_on):
 
     if minutes < 10:
         minutes = '0' + str(minutes)
-    final = "{}:{}".format(hours, minutes)
-    return final
+    final_form = "{}:{}".format(hours, minutes)
+    return final_form
 
 
 def spec_bakerloo():
@@ -146,71 +143,47 @@ def spec_bakerloo():
 
 '''final in form (station, [line], cum_wg)'''
 
-''' just incase other display breaks
-def display():
-
-    print(path_finder())
-    temp = None
-    while len(path) != 0:
-        if temp is None:
-            temp = path[-1]
-            print(str(path[-1][1]) + ' ' + str(cur_time)[:5])
-            print('\t- ' + path.pop(-1)[0])
-        if temp[1] != path[-1][1]:
-            if temp[2] is not None:
-                print(str(path[-1][1]) + ' ' + str(cum_time(cur_time, int(temp[2]))))
-            temp = path[-1]
-            print('\t- ' + path.pop(-1)[0])
-        else:
-            temp = path[-1]
-            print('\t- ' + path.pop(-1)[0])
-    print('Total time: {}'.format(cum_time(cur_time, int(temp[2]))))
-'''
-
-"""Function creating the graph"""
-creating_graph(graph)
-
 final = []
+
+
 def path_finder():
-    temp = None
-    temp2 = None
     compare = None
-    for i in range(len(path)):
-        temp = set(path[i][1])
-        if i == 1:
-            compare = temp
+    for i in path:
+        if i == path[0]:
+            compare = set(i[1]) & set(path[1][1])
+        elif i == path[-1]:
+            pass
         else:
-            if compare is not None:
-                if compare & temp2 == set():
-                    compare = temp2 & temp
-                else:
-                    compare = compare & temp2
-        #print(compare)
-        if compare is not None:
-            final.append((path[i][0], list(compare), path[i][2]))
-        else:
-            hanger = set(path[i][1]) & set(path[i+1][1])
-            final.append((path[i][0], list(hanger), path[i][2]))
-        temp2 = set(path[i][1])
-    #print(final)
+            compare = set(i[1]) & set(path[path.index(i) + 1][1])
+        final.append((i[0], list(compare), i[2]))
+
 
 def display():
     path_finder()
-    temp = None
+    temp = final[1]
     line_cur = None
+    ''' if line_cur == i[1]:
+         temp = i
+         print(('\t- ' + i[0] + ' ' + str(graph.nodes[i[0]]['line'])))
+     else:'''
     for i in final:
-        if i == 0:
-            temp = i
-            line_cur = i[1]
-            print(i[1] + ' ' + str(cur_time)[:5])
-        if line_cur == i[1]:
-            temp = i
-            print(('\t- ' + i[0]))
-        else:
-            temp = i
-            line_cur = i[1]
-            print(str(i[1]) + ' ' + str(cum_time(cur_time, int(temp[2]))))
-            print('\t- ' + i[0])
-    print('Total time: {}'.format(cum_time(cur_time, int(temp[2]))))
-    #print(final)
 
+        if i[1] == temp:
+            if i == final[0]:
+                print("\033[1m" + i[0] + ' {}'.format(cur_time[:5]) + "\033[0m")
+                print('\t{}'.format(str(i[1])))
+            elif i == final[-1]:
+                print("\033[1m" + i[0] + "\033[0m")
+                print("\033[1m" + 'Total time:{}'.format(cum_time(cur_time, i[2])) + "\033[0m")
+            else:
+                lines = len(i[1])
+                print('\t  ' + "\033[1m" + '|' * lines + "\033[0m" + '-{}'.format(i[0]))
+        else:
+            print("\033[1m" + i[0] + "\033[0m")
+            print('\t{}\t{}'.format(str(i[1]), cum_time(cur_time, i[2])))
+
+        temp = i[1]
+
+
+"""Function creating the graph"""
+creating_graph(graph)

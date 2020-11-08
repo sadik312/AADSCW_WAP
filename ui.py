@@ -78,9 +78,8 @@ def main():
     if in_time(time(5, 00), time(0)):  # 5AM -> MIDNIGHT
         ''' Call upon GUI'''
         ''' Get input and insert into Dijkstra's Algorithm'''
-        gr.dijkstra(gr.graph, source)
         gr.spec_bakerloo()
-        gr.shortest(source, destination)
+        gr.path = gr.shortest2(gr.graph, source, destination)
         gr.display()
         ''' Display within the GUI'''
 
@@ -139,3 +138,4 @@ exit_btn = Button(root, text="Exit", command=root.quit)
 exit_btn.pack()
 
 mainloop()
+
