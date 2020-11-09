@@ -151,10 +151,6 @@ def spec_bakerloo():
 
 final = []
 
-
-"""Function creating the graph"""
-creating_graph(graph)
-
 ''' final = holds final printable values as a tuple with format (station,[lines], cum_time)
     - final is the updated version of "path = []" '''
 
@@ -192,9 +188,10 @@ def display(time):
             if i == final[0]:
                 print("\033[1m" + i[0] + ' {}'.format(cur_time[:5]) + "\033[0m")
                 print('\t{}'.format(str(i[1])))
+
             elif i == final[-1]:
                 print("\033[1m" + i[0] + "\033[0m")
-                print("\033[1m" + 'Total time:{}'.format(cum_time(cur_time, i[2])) + "\033[0m")
+                print("\033[1m" + 'Final time:{}'.format(cum_time(cur_time, i[2])) + "\033[0m")
             else:
                 lines = len(i[1])
                 print('\t  ' + "\033[1m" + '|' * lines + "\033[0m" + '-{}'.format(i[0]))

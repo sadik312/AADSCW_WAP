@@ -68,8 +68,8 @@ def confirm():
             error_label = Label(root, text="Destination not found")
             error_label.pack()
     else:
-        error_label = Label(root, text="Starting station not found")	###
-        error_label.pack()												###
+        error_label = Label(root, text="Starting station not found")  ###
+        error_label.pack()  ###
 
 
 def main():
@@ -86,24 +86,24 @@ def main():
 
 src_input = Entry(root)
 src_input.insert(0, "From:")
-src_input.place(relx = 0.5, rely = 0.125, anchor = CENTER)
+src_input.place(relx=0.5, rely=0.125, anchor=CENTER)
 
 """ input for destination station"""
 des_input = Entry(root)
 des_input.insert(0, "To:")
-des_input.place(relx = 0.5, rely = 0.2, anchor = CENTER)
+des_input.place(relx=0.5, rely=0.2, anchor=CENTER)
 
 HOURS = [x for x in range(23)]
 MINUTES = [x for x in range(60)]
 
 time_label = Label(root, text='Enter time of departure')
-time_label.place(relx = 0.5, rely = 0.25, anchor = CENTER)
+time_label.place(relx=0.5, rely=0.25, anchor=CENTER)
 collon = Label(root, text=":")
-collon.place(relx = 0.5, rely = 0.3, anchor = CENTER)
+collon.place(relx=0.5, rely=0.3, anchor=CENTER)
 
-depart_hour = Entry(root, width = 2)
+depart_hour = Entry(root, width=2)
 depart_hour.insert(0, str(cur_time)[:2])
-depart_hour.place(relx = 0.48, rely = 0.3, anchor = CENTER)
+depart_hour.place(relx=0.48, rely=0.3, anchor=CENTER)
 
 '''
 variable = StringVar(root)
@@ -117,37 +117,39 @@ variable2.set(MINUTES[0])
 depart_min = OptionMenu(root, variable2, *MINUTES)
 depart_min.place(relx = 0.542, rely = 0.3, anchor = CENTER)
 '''
-depart_min = Entry(root, width = 2)
+depart_min = Entry(root, width=2)
 depart_min.insert(0, str(cur_time)[3:5])
-depart_min.place(relx = 0.52, rely = 0.3, anchor = CENTER)
+depart_min.place(relx=0.52, rely=0.3, anchor=CENTER)
 
-def checking_time(a,b):
+
+def checking_time(a, b):
     if (0 <= int(a) < 24) & (0 <= int(b) < 60):
         return '{}:{}'.format(a, b)
     else:
-        Label(root, text= 'Time not entered correctly')
+        Label(root, text='Time not entered correctly')
+
 
 """ button to confirm station entries"""
 confirm_btn = Button(root, text="Confirm", command=confirm)
-confirm_btn.place(relx = 0.5, rely = 0.375, anchor = CENTER)
+confirm_btn.place(relx=0.5, rely=0.375, anchor=CENTER)
 
 """ resets entry boxes, but not the station confirmations (can't seem to get that to work)"""
+
 
 def reset():
     src_input.delete(0, END)
     des_input.delete(0, END)
     src_input.insert(0, "From:")
     des_input.insert(0, "To: ")
-    confirm_label.pack_forget() 		###
-    confirm_label1.pack_forget() 		###
-    error_label.pack_forget() 			###
-
+    confirm_label.pack_forget()  ###
+    confirm_label1.pack_forget()  ###
+    error_label.pack_forget()  ###
 
 
 """ confirm_label.delete(0, END)"""
 
 reset_btn = Button(root, text="Reset", command=reset)
-reset_btn.place(relx = 0.5, rely = 0.425, anchor = CENTER)
+reset_btn.place(relx=0.5, rely=0.425, anchor=CENTER)
 
 """ Button that will open up TFL Map"""
 
@@ -162,11 +164,48 @@ def map_page():
 
 
 map_btn = Button(root, text="Map", command=map_page)
-map_btn.place(relx = 0.5, rely = 0.475, anchor = CENTER)
+map_btn.place(relx=0.5, rely=0.475, anchor=CENTER)
 
 """ Exit button:"""
 exit_btn = Button(root, text="Exit", command=root.quit)
-exit_btn.place(relx = 0.5, rely = 0.525, anchor = CENTER)
+exit_btn.place(relx=0.5, rely=0.525, anchor=CENTER)
+
 
 mainloop()
 
+
+class Demo1:
+    def __init__(self, master):
+        self.master = master
+        self.frame = tk.Frame(self.master)
+        self.button1 = tk.Button(self.frame, text='Main Page', width=25, command=self.new_window)
+        self.button1.pack()
+        self.frame.pack()
+
+    def new_window(self):
+        self.newWindow = tk.Toplevel(self.master)
+        self.app = Demo2(self.newWindow)
+
+
+class Demo2:
+    def __init__(self, master):
+        self.master = master
+        self.frame = tk.Frame(self.master)
+        self.quitButton = tk.Button(self.frame, text='Quit', width=25, command=self.close_windows)
+        self.quitButton.pack()
+        self.frame.pack()
+
+    def close_windows(self):
+        self.master.destroy()
+
+
+def main():
+    root = tk.Tk()
+    root.geometry('800x500')
+
+    app = Demo1(root)
+    root.mainloop()
+
+
+if __name__ == '__main__':
+    main()
