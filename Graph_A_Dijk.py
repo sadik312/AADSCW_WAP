@@ -10,6 +10,7 @@ graph = nx.Graph()
 def creating_graph(g):
     """The for loop below will loop for all the values in line dict created in 'doubly_linked_list.py'
         adding edges by iterating through every node in the line"""
+    ''' line = list'''
     for i in dl.line:
         if dl.line[i].start_node.item[1].strip() in g.nodes():
             if i not in g.nodes[dl.line[i].start_node.item[1].strip()]['line']:
@@ -117,7 +118,11 @@ def shortest2(g, s, d):
 
 cur_time = datetime.utcnow().time()
 
+''' Takes two arguments (cur_time, time being added (in mins))
+    - cur_time has multiple parameters (..seconds)
+    - Turns cur_time into string + Cuts out (slicing) the not needed'''
 
+'''     Cleans up the cur_time value to print it out as wanted (+ cum_time)     '''
 def cum_time(time, add_on):
     time = str(time)[:5]
     hours = int(time[:2])
@@ -145,6 +150,20 @@ def spec_bakerloo():
 
 final = []
 
+
+"""Function creating the graph"""
+creating_graph(graph)
+
+final = []
+''' final = holds final printable values as a tuple with format (station,[lines], cum_time)
+    - final is the updated version of "path = []" '''
+
+''' path_finder = 
+    Finds all the tube lines that could be taken from one station to another 
+        - uses sets 
+        (path holds all the lines available to take from the station)
+        - final holds all the lines that could be taken between src and destination
+        - final is called from the output function (GUI)'''
 
 def path_finder():
     compare = None
@@ -187,3 +206,5 @@ def display():
 
 """Function creating the graph"""
 creating_graph(graph)
+
+
