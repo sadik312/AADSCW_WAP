@@ -106,6 +106,7 @@ path = []
 
 def shortest2(g, s, d):
     pred = dijkstra(g, s)
+    spec_bakerloo()
     node = d
     short = []
     while True:
@@ -126,7 +127,7 @@ cur_time = datetime.utcnow().time()
 def cum_time(time, add_on):
     time = str(time)[:5]
     hours = int(time[:2])
-    minutes = int(time[3:])
+    minutes = int(time[3:5])
     minutes = minutes + add_on
     if minutes // 60 > 0:
         hours = hours + (minutes // 60)
@@ -154,7 +155,6 @@ final = []
 """Function creating the graph"""
 creating_graph(graph)
 
-final = []
 ''' final = holds final printable values as a tuple with format (station,[lines], cum_time)
     - final is the updated version of "path = []" '''
 
@@ -177,7 +177,8 @@ def path_finder():
         final.append((i[0], list(compare), i[2]))
 
 
-def display():
+def display(time):
+    cur_time = time
     path_finder()
     temp = final[1]
     line_cur = None

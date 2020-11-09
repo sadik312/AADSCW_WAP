@@ -57,7 +57,6 @@ def confirm():
 
     source = words(src_input.get().lower().strip())
     destination = words(des_input.get().lower().strip())
-
     if source in gr.graph.nodes():
         if destination in gr.graph.nodes():
             confirm_label = Label(root, text="Starting Station: " + words(source))
@@ -78,9 +77,8 @@ def main():
     if in_time(time(5, 00), time(0)):  # 5AM -> MIDNIGHT
         ''' Call upon GUI'''
         ''' Get input and insert into Dijkstra's Algorithm'''
-        gr.spec_bakerloo()
         gr.path = gr.shortest2(gr.graph, source, destination)
-        gr.display()
+        gr.display(checking_time(str(depart_hour.get()), str(depart_min.get())))
         ''' Display within the GUI'''
 
 
@@ -88,19 +86,52 @@ def main():
 
 src_input = Entry(root)
 src_input.insert(0, "From:")
-src_input.pack()
+src_input.place(relx = 0.5, rely = 0.125, anchor = CENTER)
 
 """ input for destination station"""
 des_input = Entry(root)
 des_input.insert(0, "To:")
-des_input.pack()
+des_input.place(relx = 0.5, rely = 0.2, anchor = CENTER)
+
+HOURS = [x for x in range(23)]
+MINUTES = [x for x in range(60)]
+
+time_label = Label(root, text='Enter time of departure')
+time_label.place(relx = 0.5, rely = 0.25, anchor = CENTER)
+collon = Label(root, text=":")
+collon.place(relx = 0.5, rely = 0.3, anchor = CENTER)
+
+depart_hour = Entry(root, width = 2)
+depart_hour.insert(0, str(cur_time)[:2])
+depart_hour.place(relx = 0.48, rely = 0.3, anchor = CENTER)
+
+'''
+variable = StringVar(root)
+variable.set(HOURS[0])
+depart_hour = OptionMenu(root, variable, *HOURS)
+depart_hour.place(relx = 0.455, rely = 0.3, anchor = CENTER)
+
+
+variable2 = StringVar(root)
+variable2.set(MINUTES[0])
+depart_min = OptionMenu(root, variable2, *MINUTES)
+depart_min.place(relx = 0.542, rely = 0.3, anchor = CENTER)
+'''
+depart_min = Entry(root, width = 2)
+depart_min.insert(0, str(cur_time)[3:5])
+depart_min.place(relx = 0.52, rely = 0.3, anchor = CENTER)
+
+def checking_time(a,b):
+    if (0 <= int(a) < 24) & (0 <= int(b) < 60):
+        return '{}:{}'.format(a, b)
+    else:
+        Label(root, text= 'Time not entered correctly')
 
 """ button to confirm station entries"""
 confirm_btn = Button(root, text="Confirm", command=confirm)
-confirm_btn.pack()
+confirm_btn.place(relx = 0.5, rely = 0.375, anchor = CENTER)
 
 """ resets entry boxes, but not the station confirmations (can't seem to get that to work)"""
-
 
 def reset():
     src_input.delete(0, END)
@@ -116,7 +147,7 @@ def reset():
 """ confirm_label.delete(0, END)"""
 
 reset_btn = Button(root, text="Reset", command=reset)
-reset_btn.pack()
+reset_btn.place(relx = 0.5, rely = 0.425, anchor = CENTER)
 
 """ Button that will open up TFL Map"""
 
@@ -131,11 +162,11 @@ def map_page():
 
 
 map_btn = Button(root, text="Map", command=map_page)
-map_btn.pack()
+map_btn.place(relx = 0.5, rely = 0.475, anchor = CENTER)
 
 """ Exit button:"""
 exit_btn = Button(root, text="Exit", command=root.quit)
-exit_btn.pack()
+exit_btn.place(relx = 0.5, rely = 0.525, anchor = CENTER)
 
 mainloop()
 
