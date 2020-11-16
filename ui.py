@@ -1,5 +1,6 @@
 from datetime import datetime, time
 from tkinter import *
+from tkinter import font
 from PIL import ImageTk, Image
 import Graph_A_Dijk as gr
 
@@ -78,7 +79,8 @@ def main():
         ''' Call upon GUI'''
         ''' Get input and insert into Dijkstra's Algorithm'''
         gr.path = gr.shortest2(gr.graph, source, destination)
-        gr.display(checking_time(str(depart_hour.get()), str(depart_min.get())))
+        display_gui(checking_time(str(depart_hour.get()), str(depart_min.get())))
+        #gr.display(checking_time(str(depart_hour.get()), str(depart_min.get())))
         ''' Display within the GUI'''
 
 
@@ -93,8 +95,6 @@ des_input = Entry(root)
 des_input.insert(0, "To:")
 des_input.place(relx=0.5, rely=0.2, anchor=CENTER)
 
-HOURS = [x for x in range(23)]
-MINUTES = [x for x in range(60)]
 
 time_label = Label(root, text='Enter time of departure')
 time_label.place(relx=0.5, rely=0.25, anchor=CENTER)
@@ -121,6 +121,10 @@ depart_min = Entry(root, width=2)
 depart_min.insert(0, str(cur_time)[3:5])
 depart_min.place(relx=0.52, rely=0.3, anchor=CENTER)
 
+
+def bold(frame, text):
+    bold_font = font.Font(frame, text)
+    bold_font.configure(weight = 'bold', font = bold_font)
 
 def checking_time(a, b):
     if (0 <= int(a) < 24) & (0 <= int(b) < 60):
@@ -170,42 +174,48 @@ map_btn.place(relx=0.5, rely=0.475, anchor=CENTER)
 exit_btn = Button(root, text="Exit", command=root.quit)
 exit_btn.place(relx=0.5, rely=0.525, anchor=CENTER)
 
+def display_gui(time):
+    display = Tk()
+    display.title('Route Planner App')
+    display.geometry('800x500')
+
+    cur_time = time
+    gr.path_finder()
+    temp = gr.final[1]
+    line_cur = None
+    ''' if line_cur == i[1]:
+         temp = i
+         print(('\t- ' + i[0] + ' ' + str(graph.nodes[i[0]]['line'])))
+     else:'''
+    for i in gr.final:
+
+        if i[1] == temp:
+            if i == gr.final[0]:
+
+
+                text1 = i[0] + ' {}'.format(cur_time[:5]) + '\n' + '\t{}'.format(str(i[1]))
+                Label(dispplay, text = text1).pack(anchor= W)
+
+
+            elif i == gr.final[-1]:
+                text1 = i[0] + '\t' + 'Final time:{}'.format(gr.cum_time(cur_time, i[2]))
+                Label(display, text = text1).pack(anchor= W)
+
+            else:
+                lines = len(i[1])
+
+                text1 = '\t' + '|' * lines + '-{}'.format(i[0])
+                Label(display, text = text1).pack(anchor= W)
+        else:
+
+
+            text1 = i[0] + '\n' + '\t{}\t{}'.format(str(i[1]), gr.cum_time(cur_time, i[2]))
+            Label(display, text = text1).pack(anchor= W)
+
+        temp = i[1]
+
+
+
 
 mainloop()
 
-
-class Demo1:
-    def __init__(self, master):
-        self.master = master
-        self.frame = tk.Frame(self.master)
-        self.button1 = tk.Button(self.frame, text='Main Page', width=25, command=self.new_window)
-        self.button1.pack()
-        self.frame.pack()
-
-    def new_window(self):
-        self.newWindow = tk.Toplevel(self.master)
-        self.app = Demo2(self.newWindow)
-
-
-class Demo2:
-    def __init__(self, master):
-        self.master = master
-        self.frame = tk.Frame(self.master)
-        self.quitButton = tk.Button(self.frame, text='Quit', width=25, command=self.close_windows)
-        self.quitButton.pack()
-        self.frame.pack()
-
-    def close_windows(self):
-        self.master.destroy()
-
-
-def main():
-    root = tk.Tk()
-    root.geometry('800x500')
-
-    app = Demo1(root)
-    root.mainloop()
-
-
-if __name__ == '__main__':
-    main()
