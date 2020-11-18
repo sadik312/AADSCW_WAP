@@ -80,7 +80,7 @@ def main():
         ''' Get input and insert into Dijkstra's Algorithm'''
         gr.path = gr.shortest2(gr.graph, source, destination)
         display_gui(checking_time(str(depart_hour.get()), str(depart_min.get())))
-        #gr.display(checking_time(str(depart_hour.get()), str(depart_min.get())))
+        # gr.display(checking_time(str(depart_hour.get()), str(depart_min.get())))
         ''' Display within the GUI'''
 
 
@@ -94,7 +94,6 @@ src_input.place(relx=0.5, rely=0.125, anchor=CENTER)
 des_input = Entry(root)
 des_input.insert(0, "To:")
 des_input.place(relx=0.5, rely=0.2, anchor=CENTER)
-
 
 time_label = Label(root, text='Enter time of departure')
 time_label.place(relx=0.5, rely=0.25, anchor=CENTER)
@@ -122,9 +121,11 @@ depart_min.insert(0, str(cur_time)[3:5])
 depart_min.place(relx=0.52, rely=0.3, anchor=CENTER)
 
 
-def bold(frame, text):
-    bold_font = font.Font(frame, text)
-    bold_font.configure(weight = 'bold', font = bold_font)
+def bold(text):
+    bold_font = font.Font(root, text)
+    bold_font.configure(weight='bold')
+    Label(root, text=bold_font).pack()
+
 
 def checking_time(a, b):
     if (0 <= int(a) < 24) & (0 <= int(b) < 60):
@@ -145,11 +146,10 @@ def reset():
     des_input.delete(0, END)
     src_input.insert(0, "From:")
     des_input.insert(0, "To: ")
-    confirm_label.pack_forget()  ###
-    confirm_label1.pack_forget()  ###
-    error_label.pack_forget()  ###
-
-
+    confirm_label.pack_forget()
+    confirm_label1.pack_forget()
+    error_label.pack_forget()
+    display.quit
 """ confirm_label.delete(0, END)"""
 
 reset_btn = Button(root, text="Reset", command=reset)
@@ -174,7 +174,9 @@ map_btn.place(relx=0.5, rely=0.475, anchor=CENTER)
 exit_btn = Button(root, text="Exit", command=root.quit)
 exit_btn.place(relx=0.5, rely=0.525, anchor=CENTER)
 
+fontStyle = font.Font(weight = 'bold', size = 20 )
 def display_gui(time):
+    global display
     display = Tk()
     display.title('Route Planner App')
     display.geometry('800x500')
@@ -192,30 +194,34 @@ def display_gui(time):
         if i[1] == temp:
             if i == gr.final[0]:
 
-
-                text1 = i[0] + ' {}'.format(cur_time[:5]) + '\n' + '\t{}'.format(str(i[1]))
-                Label(dispplay, text = text1).pack(anchor= W)
+                text1 = i[0] + '{}{}'.format(' '*10, cur_time[:5])
+                Label(dispplay, text=text1, size = 28).pack(anchor=W)
+                Label(display, text = '{}{}'.format(' '*10, str(i[1])).pack(anchor=W))
 
 
             elif i == gr.final[-1]:
-                text1 = i[0] + '\t' + 'Final time:{}'.format(gr.cum_time(cur_time, i[2]))
-                Label(display, text = text1).pack(anchor= W)
+                text1 = i[0]
+                Label(display, text=text1).pack(anchor=W)
+                Label(display, text='Final time:{}'.format(gr.cum_time(cur_time, i[2]))).pack(anchor=W)
 
             else:
                 lines = len(i[1])
 
-                text1 = '\t' + '|' * lines + '-{}'.format(i[0])
-                Label(display, text = text1).pack(anchor= W)
+                text1 = ' '*10 + '|' * lines + '-{}'.format(i[0])
+                Label(display, text=text1).pack(anchor=W)
         else:
 
-
-            text1 = i[0] + '\n' + '\t{}\t{}'.format(str(i[1]), gr.cum_time(cur_time, i[2]))
-            Label(display, text = text1).pack(anchor= W)
+            text1 = i[0]
+            Label(display, text=text1, font = fontStyle).pack(anchor=W)
+            changes = None
+            for lines in i[1]:
+                if changes is None:
+                    changes = lines
+                else:
+                    changes = changes + ', ' + lines
+            Label(display, text='{}{}{}{}'.format(' '*5,changes,' '*5, gr.cum_time(cur_time, i[2]))).pack(anchor=W)
 
         temp = i[1]
-
-
-
-
-mainloop()
-
+    display.mainloop()
+#bold('hello')
+root.mainloop()
