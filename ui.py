@@ -8,7 +8,7 @@ import Graph_A_Dijk as gr
 root = Tk()
 root.title('Route Planner App')
 root.geometry('800x500')
-photo = PhotoImage(file="Photos/train.png")
+photo = PhotoImage(file="Photos/PR.gif")
 root.iconphoto(False, photo)
 
 confirm_label = Label(root)
@@ -81,7 +81,7 @@ def main():
         ''' Get input and insert into Dijkstra's Algorithm'''
         gr.path = gr.shortest2(gr.graph, source, destination)
         if checking_time(str(depart_hour.get()), str(depart_min.get())) is False:
-            root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file='Photos/lol.png'))
+            root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file='Photos/lol.gif'))
             messagebox.showerror("Incorrect Time", "Entered time is not valid")
         else:
             display_gui(checking_time(str(depart_hour.get()), str(depart_min.get())))
