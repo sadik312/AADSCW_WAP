@@ -171,7 +171,7 @@ map_btn.place(relx=0.5, rely=0.475, anchor=CENTER)
 exit_btn = Button(root, text="Exit", command=root.quit)
 exit_btn.place(relx=0.5, rely=0.525, anchor=CENTER)
 
-fontStyle = font.Font(weight='bold', size=20)
+
 
 
 def display_gui(time):

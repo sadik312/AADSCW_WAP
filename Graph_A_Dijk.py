@@ -119,12 +119,13 @@ def shortest2(g, s, d, time):
 
 
 cur_time = datetime.utcnow().time()
-print(cur_time)
 ''' Takes two arguments (cur_time, time being added (in mins))
     - cur_time has multiple parameters (..seconds)
     - Turns cur_time into string + Cuts out (slicing) the not needed'''
 
 '''     Cleans up the cur_time value to print it out as wanted (+ cum_time)     '''
+
+
 def cum_time(time, add_on):
     time = str(time)[:5]
     hours = int(time[:2])
@@ -137,7 +138,7 @@ def cum_time(time, add_on):
 
     if minutes < 10:
         minutes = '0' + str(minutes)
-    final_form = "{}:{}".format(hours, int(minutes))
+    final_form = "{}:{}".format(int(hours), int(minutes))
     return final_form
 
 
@@ -163,18 +164,24 @@ final = []
         - final holds all the lines that could be taken between src and destination
         - final is called from the output function (GUI)'''
 
+
 def path_finder():
     compare = None
     for i in path:
         if i == path[0]:
             compare = set(i[1]) & set(path[1][1])
-        elif i == path[-1]:
+        elif i == path[-1] or path[1]:
             pass
-        else:
-            compare = set(i[1]) & set(path[path.index(i) + 1][1])
+        if list(compare) != i[1]:
+            if i == path[-1]:
+                pass
+            else:
+                compare = set(i[1]) & set(path[path.index(i) + 1][1])
         final.append((i[0], list(compare), i[2]))
 
 
+'''
+prints to console for testing and back up purposes
 def display(time):
     cur_time = time
     path_finder()
@@ -199,9 +206,7 @@ def display(time):
             print('\t{}\t{}'.format(str(i[1]), cum_time(cur_time, i[2])))
 
         temp = i[1]
-
+'''
 
 """Function creating the graph"""
 creating_graph(graph)
-
-
