@@ -2,13 +2,14 @@ from datetime import datetime, time
 from tkinter import *
 from tkinter import font
 from PIL import ImageTk, Image
+from tkinter import messagebox
 import Graph_A_Dijk as gr
 
 root = Tk()
 root.title('Route Planner App')
 root.geometry('800x500')
-""" root.iconbitmap('train.png') # remember to credit the author 'freepick',
- from website: https://www.flaticon.com/authors/freepik """
+photo = PhotoImage(file="Photos/train.png")
+root.iconphoto(False, photo)
 
 confirm_label = Label(root)
 confirm_label1 = Label(root)
@@ -79,9 +80,13 @@ def main():
         ''' Call upon GUI'''
         ''' Get input and insert into Dijkstra's Algorithm'''
         gr.path = gr.shortest2(gr.graph, source, destination)
-        display_gui(checking_time(str(depart_hour.get()), str(depart_min.get())))
-        # gr.display(checking_time(str(depart_hour.get()), str(depart_min.get())))
-        ''' Display within the GUI'''
+        if checking_time(str(depart_hour.get()), str(depart_min.get())) is False:
+            root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file='Photos/lol.png'))
+            messagebox.showerror("Incorrect Time", "Entered time is not valid")
+        else:
+            display_gui(checking_time(str(depart_hour.get()), str(depart_min.get())))
+            # gr.display(checking_time(str(depart_hour.get()), str(depart_min.get())))
+            ''' Display within the GUI'''
 
 
 """ input for starting station"""
@@ -104,18 +109,6 @@ depart_hour = Entry(root, width=2)
 depart_hour.insert(0, str(cur_time)[:2])
 depart_hour.place(relx=0.48, rely=0.3, anchor=CENTER)
 
-'''
-variable = StringVar(root)
-variable.set(HOURS[0])
-depart_hour = OptionMenu(root, variable, *HOURS)
-depart_hour.place(relx = 0.455, rely = 0.3, anchor = CENTER)
-
-
-variable2 = StringVar(root)
-variable2.set(MINUTES[0])
-depart_min = OptionMenu(root, variable2, *MINUTES)
-depart_min.place(relx = 0.542, rely = 0.3, anchor = CENTER)
-'''
 depart_min = Entry(root, width=2)
 depart_min.insert(0, str(cur_time)[3:5])
 depart_min.place(relx=0.52, rely=0.3, anchor=CENTER)
@@ -131,7 +124,7 @@ def checking_time(a, b):
     if (0 <= int(a) < 24) & (0 <= int(b) < 60):
         return '{}:{}'.format(a, b)
     else:
-        Label(root, text='Time not entered correctly')
+        return False
 
 
 """ button to confirm station entries"""
@@ -149,7 +142,8 @@ def reset():
     confirm_label.pack_forget()
     confirm_label1.pack_forget()
     error_label.pack_forget()
-    display.quit
+
+
 """ confirm_label.delete(0, END)"""
 
 reset_btn = Button(root, text="Reset", command=reset)
@@ -174,54 +168,68 @@ map_btn.place(relx=0.5, rely=0.475, anchor=CENTER)
 exit_btn = Button(root, text="Exit", command=root.quit)
 exit_btn.place(relx=0.5, rely=0.525, anchor=CENTER)
 
-fontStyle = font.Font(weight = 'bold', size = 20 )
+fontStyle = font.Font(weight='bold', size=20)
+
+
 def display_gui(time):
+    gr.final = []
     global display
     display = Tk()
     display.title('Route Planner App')
-    display.geometry('800x500')
+    if len(gr.path) < 20:
+        height = 30
+    else:
+        height = len(gr.path) * 2
 
+    text = Text(display, height=height, width=60)
+    text.pack()
+
+    Button(display, text='Main page', command=lambda: [text.delete(1.0, END), display.destroy()]).pack()
     cur_time = time
     gr.path_finder()
     temp = gr.final[1]
-    line_cur = None
-    ''' if line_cur == i[1]:
-         temp = i
-         print(('\t- ' + i[0] + ' ' + str(graph.nodes[i[0]]['line'])))
-     else:'''
+
+    text.tag_configure('Main_station', font=('Arial', 18, 'bold'))
+    text.tag_configure('stations', font=('Arial', 14,))
+
+    colours = {'Bakerloo': '#B36305', 'Central': '#E32017', 'Circle': '#FFD300', 'District': '#00782A',
+               'Hammersmith & City': '#F3A9BB', 'Jubilee': '#A0A5A9', 'Metropolitan': '#9B0056', 'Northern': '#000000',
+               'Piccadilly': '#003688', 'Victoria': '#0098D4', 'Waterloo and City': '#95CDBA'}
+
+    '''      
+            if changes is None:
+                changes = lines
+            else:
+                changes = changes + ', ' + lines
+        # Label(display, text='{}{}{}{}'.format(' '*5,changes,' '*5, gr.cum_time(cur_time, i[2]))).pack(anchor=W)
+        text.insert(END, '{}{}{}{}\n'.format(' ' * 2, changes, ' ' * 2, gr.cum_time(cur_time, i[2])), 'lines')
+    '''
+
     for i in gr.final:
-
         if i[1] == temp:
-            if i == gr.final[0]:
+            if i == gr.final[-1]:
 
-                text1 = i[0] + '{}{}'.format(' '*10, cur_time[:5])
-                Label(dispplay, text=text1, size = 28).pack(anchor=W)
-                Label(display, text = '{}{}'.format(' '*10, str(i[1])).pack(anchor=W))
-
-
-            elif i == gr.final[-1]:
-                text1 = i[0]
-                Label(display, text=text1).pack(anchor=W)
-                Label(display, text='Final time:{}'.format(gr.cum_time(cur_time, i[2]))).pack(anchor=W)
+                text.insert(END, i[0] + '\n', 'Main_station')
+                text.insert(END, 'Final time:{}'.format(gr.cum_time(cur_time, i[2])), 'Main_station')
 
             else:
                 lines = len(i[1])
 
-                text1 = ' '*10 + '|' * lines + '-{}'.format(i[0])
-                Label(display, text=text1).pack(anchor=W)
+                text.insert(END, ' ' * 5 + '|' * lines + '-{}'.format(i[0]) + '\n', 'stations')
+
         else:
 
-            text1 = i[0]
-            Label(display, text=text1, font = fontStyle).pack(anchor=W)
-            changes = None
+            text.insert(END, i[0] + '\n', 'Main_station')
             for lines in i[1]:
-                if changes is None:
-                    changes = lines
+                text.tag_configure(lines, font=('Arial', 15, 'bold'), foreground=colours[lines])
+                if lines == i[1][-1]:
+                    text.insert(END, ' ' + lines, '{}'.format(lines))
+                    text.insert(END, ' ' + gr.cum_time(cur_time, i[2]) + '\n')
+                elif lines == i[1][0]:
+                    text.insert(END, ' ' * 7 + lines + ',', '{}'.format(lines))
                 else:
-                    changes = changes + ', ' + lines
-            Label(display, text='{}{}{}{}'.format(' '*5,changes,' '*5, gr.cum_time(cur_time, i[2]))).pack(anchor=W)
-
+                    text.insert(END, lines + ',', '{}'.format(lines))
         temp = i[1]
-    display.mainloop()
-#bold('hello')
-root.mainloop()
+
+
+mainloop()

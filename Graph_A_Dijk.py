@@ -137,7 +137,7 @@ def cum_time(time, add_on):
 
     if minutes < 10:
         minutes = '0' + str(minutes)
-    final_form = "{}:{}".format(hours, minutes)
+    final_form = "{}:{}".format(hours, int(minutes))
     return final_form
 
 
@@ -179,17 +179,14 @@ def display(time):
     path_finder()
     temp = final[1]
     line_cur = None
-    ''' if line_cur == i[1]:
-         temp = i
-         print(('\t- ' + i[0] + ' ' + str(graph.nodes[i[0]]['line'])))
-     else:'''
+
     for i in final:
 
         if i[1] == temp:
             if i == final[0]:
-                print("\033[1m" + i[0] + ' {}'.format(cur_time[:5]) + "\033[0m")
-                print('\t{}'.format(str(i[1])))
-
+                #print("\033[1m" + i[0] + ' {}'.format(cur_time[:5]) + "\033[0m")
+                #print('\t{}'.format(str(i[1])))
+                pass
             elif i == final[-1]:
                 print("\033[1m" + i[0] + "\033[0m")
                 print("\033[1m" + 'Final time:{}'.format(cum_time(cur_time, i[2])) + "\033[0m")
