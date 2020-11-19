@@ -4,6 +4,7 @@ from tkinter import font
 from PIL import ImageTk, Image
 from tkinter import messagebox
 import Graph_A_Dijk as gr
+import webbrowser
 
 root = Tk()
 root.title('Route Planner App')
@@ -18,7 +19,6 @@ error_label = Label(root)
 # func to confirm entered stations
 source = None
 destination = None
-
 
 def words(string):
     if " " in string:
@@ -59,27 +59,30 @@ def confirm():
 
     source = words(src_input.get().lower().strip())
     destination = words(des_input.get().lower().strip())
-    if source in gr.graph.nodes():
-        if destination in gr.graph.nodes():
-            confirm_label = Label(root, text="Starting Station: " + words(source))
-            confirm_label.pack()
-            confirm_label1 = Label(root, text="Destination Station: " + words(destination))
-            confirm_label1.pack()
-            main()
+    if source != destination:
+        if source in gr.graph.nodes():
+            if destination in gr.graph.nodes():
+                confirm_label = Label(root, text="Starting Station: " + words(source))
+                confirm_label.pack()
+                confirm_label1 = Label(root, text="Destination Station: " + words(destination))
+                confirm_label1.pack()
+                main()
+            else:
+                error_label = Label(root, text="Destination not found")
+                error_label.pack()
         else:
-            error_label = Label(root, text="Destination not found")
-            error_label.pack()
+            error_label = Label(root, text="Starting station not found")  ###
+            error_label.pack()  ###
     else:
-        error_label = Label(root, text="Starting station not found")  ###
+        error_label = Label(root, text="Same station")  ###
         error_label.pack()  ###
-
 
 def main():
     """ Check if User is Accessing the Application within train running periods"""
     if in_time(time(5, 00), time(0)):  # 5AM -> MIDNIGHT
         ''' Call upon GUI'''
         ''' Get input and insert into Dijkstra's Algorithm'''
-        gr.path = gr.shortest2(gr.graph, source, destination)
+        gr.path = gr.shortest2(gr.graph, source, destination, int(depart_hour.get()))
         if checking_time(str(depart_hour.get()), str(depart_min.get())) is False:
             root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file='Photos/lol.gif'))
             messagebox.showerror("Incorrect Time", "Entered time is not valid")
@@ -161,7 +164,7 @@ def map_page():
     map_label.pack()
 
 
-map_btn = Button(root, text="Map", command=map_page)
+map_btn = Button(root, text="Map", command=lambda:[webbrowser.open("http://content.tfl.gov.uk/standard-tube-map.pdf")])
 map_btn.place(relx=0.5, rely=0.475, anchor=CENTER)
 
 """ Exit button:"""

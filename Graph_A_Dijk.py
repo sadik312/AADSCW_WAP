@@ -105,9 +105,9 @@ path = []
     doing this would decrease the time complexity '''
 
 
-def shortest2(g, s, d):
+def shortest2(g, s, d, time):
     pred = dijkstra(g, s)
-    spec_bakerloo()
+    spec_bakerloo(time)
     node = d
     short = []
     while True:
@@ -119,7 +119,7 @@ def shortest2(g, s, d):
 
 
 cur_time = datetime.utcnow().time()
-
+print(cur_time)
 ''' Takes two arguments (cur_time, time being added (in mins))
     - cur_time has multiple parameters (..seconds)
     - Turns cur_time into string + Cuts out (slicing) the not needed'''
@@ -141,9 +141,10 @@ def cum_time(time, add_on):
     return final_form
 
 
-def spec_bakerloo():
+def spec_bakerloo(h):
+    a = 9 <= h < 16 or 19 <= h < 24
     cond = (time(9, 00) <= cur_time <= time(16, 00)) or (time(19, 00) <= cur_time <= time(0))
-    if cond:
+    if cond or a:
         for vertices in dl.Bakerloo.traversing_the_list():
             graph.nodes[vertices]['cum_wg'] = (((graph.nodes[vertices]['cum_wg'] - 1) / 2) + 1)
 
