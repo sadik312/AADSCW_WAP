@@ -208,7 +208,7 @@ def display_gui(time):
 
     colours = {'Bakerloo': '#B36305', 'Central': '#E32017', 'Circle': '#FFD300', 'District': '#00782A',
                'Hammersmith & City': '#F3A9BB', 'Jubilee': '#A0A5A9', 'Metropolitan': '#9B0056', 'Northern': '#000000',
-               'Piccadilly': '#003688', 'Victoria': '#0098D4', 'Waterloo and City': '#95CDBA'}
+               'Piccadilly': '#003688', 'Victoria': '#0098D4', 'Waterloo & City': '#95CDBA'}
 
     '''      
             if changes is None:
@@ -222,7 +222,6 @@ def display_gui(time):
     for i in gr.final:
         if i[1] == temp:
             if i == gr.final[-1]:
-
                 text.insert(END, i[0] + '\n', 'Main_station')
                 text.insert(END, 'Final time:{}'.format(gr.cum_time(cur_time, i[2])), 'Main_station')
 

@@ -27,7 +27,8 @@ def creating_graph(g):
             g.add_node(dl.line[i].start_node.item[2].strip(), cum_wg=None, line=[dl.line[i].start_node.item[0]])
 
         g.add_edge(dl.line[i].start_node.item[1].strip(), dl.line[i].start_node.item[2].strip(),
-                   weight=dl.line[i].start_node.item[3], line=dl.line[i].start_node.item[0])
+                   weight=dl.line[i].start_node.item[3], line=dl.line[i].start_node.item[0],
+                   weight_half=(int(dl.line[i].start_node.item[3]) / 2))
         n = dl.line[i].start_node
 
         """while loop used to iterate through all the nodes/stations in the tube line, same technique used as 
@@ -45,7 +46,8 @@ def creating_graph(g):
                     g.nodes[n.item[2].strip()]['line'].append(i)
             else:
                 g.add_node(n.item[2].strip(), cum_wg=None, line=[n.item[0]])
-            g.add_edge(n.item[1].strip(), n.item[2].strip(), weight=n.item[3], line=n.item[0])
+            g.add_edge(n.item[1].strip(), n.item[2].strip(), weight=n.item[3], line=n.item[0],
+                       weight_half=int(n.item[3]) / 2)
             n = n.next
 
 
@@ -59,7 +61,7 @@ def creating_graph(g):
 """For the dijkstra algorithm"""
 
 
-def dijkstra(g, src):
+def dijkstra(g, src, check):
     d = {}
     vised = {}  # Maps the Visited Vertices to its 'distance to vertex' value
     pred = {}
@@ -87,7 +89,10 @@ def dijkstra(g, src):
         ''' For all the outgoing/neighbouring edges '''
         for e in g.neighbors(u):
             if e not in vised:
-                weight = int(g.get_edge_data(u, e)['weight'])
+                if spec_bakerloo(check) and (e in dl.Bakerloo.traversing_the_list()):
+                    weight = int(g.get_edge_data(u, e)['weight_half'])
+                else:
+                    weight = int(g.get_edge_data(u, e)['weight'])
                 ''' Relaxation step on edges (e, u)'''
                 '''is the accumulated value better than d[e]'''
                 if d[u] + weight < d[e]:
@@ -106,8 +111,7 @@ path = []
 
 
 def shortest2(g, s, d, time):
-    pred = dijkstra(g, s)
-    spec_bakerloo(time)
+    pred = dijkstra(g, s, time)
     node = d
     short = []
     while True:
@@ -128,12 +132,12 @@ cur_time = datetime.utcnow().time()
 
 def cum_time(time, add_on):
     time = str(time)[:5]
+    if len(str(time)) < 5:
+        time = '0' + time
     hours = str(time[:2])
-    if ':' in hours:
-        hours = int(hours[0])
-    else:
-        hours = int(hours)
+    hours = int(hours)
     minutes = int(time[3:5])
+
     minutes = minutes + add_on
     if minutes // 60 > 0:
         hours = hours + (minutes // 60)
@@ -143,6 +147,7 @@ def cum_time(time, add_on):
     if minutes < 10:
         minutes = int(minutes) // 1
         minutes = '0' + str(minutes)
+
     if hours >= 24:
         hours = hours - 24
     if hours < 10:
@@ -152,12 +157,34 @@ def cum_time(time, add_on):
     return final_form
 
 
+'''
 def spec_bakerloo(h):
-    a = 9 <= h < 16 or 19 <= h < 24
-    cond = (time(9, 00) <= cur_time <= time(16, 00)) or (time(19, 00) <= cur_time <= time(0))
-    if cond or a:
+    z =h
+    if str(h)[0] == 0:
+        z = int(str(h)[1])
+    a = 9 <= z < 16 or 19 <= z < 24
+    if a:
+        temp = None
+        x = None
         for vertices in dl.Bakerloo.traversing_the_list():
-            graph.nodes[vertices]['cum_wg'] = (((graph.nodes[vertices]['cum_wg'] - 1) / 2) + 1)
+            if vertices == dl.Bakerloo.traversing_the_list()[0]:
+                temp =vertices
+                x = graph.nodes[vertices]['cum_wg']
+            else:
+                y = graph.nodes[vertices]['cum_wg'] - graph.nodes[temp]['cum_wg']
+                y = (((y - 1) / 2) + 1)
+                graph.nodes[vertices]['cum_wg'] = x + y
+                x = graph.nodes[vertices]['cum_wg']
+'''
+
+
+def spec_bakerloo(h):
+    z = h
+    if str(h)[0] == 0:
+        z = int(str(h)[1])
+    a = 9 <= z < 16 or 19 <= z < 24
+    if a:
+        return a
 
 
 '''final in form (station, [line], cum_wg)'''
