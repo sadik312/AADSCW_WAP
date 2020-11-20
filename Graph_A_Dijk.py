@@ -128,7 +128,11 @@ cur_time = datetime.utcnow().time()
 
 def cum_time(time, add_on):
     time = str(time)[:5]
-    hours = int(time[:2])
+    hours = str(time[:2])
+    if ':' in hours:
+        hours = int(hours[0])
+    else:
+        hours = int(hours)
     minutes = int(time[3:5])
     minutes = minutes + add_on
     if minutes // 60 > 0:
@@ -139,7 +143,7 @@ def cum_time(time, add_on):
     if minutes < 10:
         minutes = int(minutes) // 1
         minutes = '0' + str(minutes)
-    if int(hours) >= 24:
+    if hours >= 24:
         hours = hours - 24
     if hours < 10:
         hours = int(hours) // 1
