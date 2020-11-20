@@ -11,7 +11,7 @@ root.title('Route Planner App')
 root.geometry('800x500')
 photo = PhotoImage(file="Photos/PR.gif")
 root.iconphoto(False, photo)
-
+root.configure(bg='black')
 confirm_label = Label(root)
 confirm_label1 = Label(root)
 error_label = Label(root)
@@ -149,7 +149,7 @@ def checking_time(a, b):
 
 
 """ button to confirm station entries"""
-confirm_btn = Button(root, text="Confirm", command=confirm)
+confirm_btn = Button(root, text="Confirm", command=confirm, bg = 'red')
 confirm_btn.place(relx=0.5, rely=0.375, anchor=CENTER)
 
 """ resets entry boxes, but not the station confirmations (can't seem to get that to work)"""
@@ -209,6 +209,7 @@ def display_gui(time):
     temp = gr.final[1]
 
     text.tag_configure('Main_station', font=('Arial', 18, 'bold'))
+    text.tag_configure('bold', font=('Arial', 14, 'bold'))
     text.tag_configure('stations', font=('Arial', 14,))
 
     colours = {'Bakerloo': '#B36305', 'Central': '#E32017', 'Circle': '#FFD300', 'District': '#00782A',
@@ -242,7 +243,7 @@ def display_gui(time):
                 text.tag_configure(lines, font=('Arial', 15, 'bold'), foreground=colours[lines])
                 if lines == i[1][-1]:
                     text.insert(END, ' ' + lines, '{}'.format(lines))
-                    text.insert(END, ' ' + gr.cum_time(cur_time, i[2]) + '\n')
+                    text.insert(END, ' ' + gr.cum_time(cur_time, i[2]) + '\n', 'bold')
                 elif lines == i[1][0]:
                     text.insert(END, ' ' * 7 + lines + ',', '{}'.format(lines))
                 else:
