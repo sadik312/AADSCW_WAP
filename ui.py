@@ -20,6 +20,7 @@ error_label = Label(root)
 source = None
 destination = None
 
+
 def words(string):
     if " " in string:
         newText = ''
@@ -52,6 +53,8 @@ def in_time(startTime, endTime):
             return True
         else:
             return False
+
+
 def confirm():
     global source
     global destination
@@ -82,6 +85,7 @@ def confirm():
         error_label = Label(root, text="Same station")  ###
         error_label.pack()  ###
 
+
 def main():
     """ Check if User is Accessing the Application within train running periods"""
     if in_time(time(5, 00), time(0)):  # 5AM -> MIDNIGHT
@@ -97,7 +101,9 @@ def main():
             ''' Display within the GUI'''
     else:
         root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file='Photos/lol.gif'))
-        messagebox.showerror("Application not available", "No trians are ruinning at this hour. The train should run between the hours of 5:00am to Midnight")
+        messagebox.showerror("Application not available", "No trians are ruinning at this hour. The train should run "
+                                                          "between the hours of 5:00am to Midnight")
+
 
 """ input for starting station"""
 
@@ -171,14 +177,12 @@ def map_page():
     map_label.pack()
 
 
-map_btn = Button(root, text="Map", command=lambda:[webbrowser.open("http://content.tfl.gov.uk/standard-tube-map.pdf")])
+map_btn = Button(root, text="Map", command=lambda: [webbrowser.open("http://content.tfl.gov.uk/standard-tube-map.pdf")])
 map_btn.place(relx=0.5, rely=0.475, anchor=CENTER)
 
 """ Exit button:"""
 exit_btn = Button(root, text="Exit", command=root.quit)
 exit_btn.place(relx=0.5, rely=0.525, anchor=CENTER)
-
-
 
 
 def display_gui(time):
