@@ -68,18 +68,23 @@ def confirm():
     source = words(src_input.get().lower().strip())
     destination = words(des_input.get().lower().strip())
     if source != destination:
-        if source in gr.graph.nodes():
-            if destination in gr.graph.nodes():
-                confirm_label = Label(root, text="Starting Station: " + words(source))
-                confirm_label.pack()
-                confirm_label1 = Label(root, text="Destination Station: " + words(destination))
-                confirm_label1.pack()
-                main()
+        if (0 <= int(depart_hour.get()) <= 23) and (0 <= int(depart_min.get()) <= 59):
+
+            if source in gr.graph.nodes():
+                if destination in gr.graph.nodes():
+                    confirm_label = Label(root, text="Starting Station: " + words(source))
+                    confirm_label.pack()
+                    confirm_label1 = Label(root, text="Destination Station: " + words(destination))
+                    confirm_label1.pack()
+                    main()
+                else:
+                    error_label = Label(root, text="Destination not found")
+                    error_label.pack()
             else:
-                error_label = Label(root, text="Destination not found")
-                error_label.pack()
+                error_label = Label(root, text="Starting station not found")  ###
+                error_label.pack()  ###
         else:
-            error_label = Label(root, text="Starting station not found")  ###
+            error_label = Label(root, text="Time entered is invalid")  ###
             error_label.pack()  ###
     else:
         error_label = Label(root, text="Same station")  ###
