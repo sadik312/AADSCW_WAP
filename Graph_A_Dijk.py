@@ -137,13 +137,14 @@ def cum_time(time, add_on):
         minutes = int(60 * rem_min)
 
     if minutes < 10:
+        minutes = int(minutes) // 1
         minutes = '0' + str(minutes)
     if int(hours) >= 24:
         hours = hours - 24
     if hours < 10:
         hours = int(hours) // 1
         hours = '0' + str(hours)
-    final_form = "{}:{}".format(hours, int(minutes))
+    final_form = "{}:{}".format(hours, minutes)
     return final_form
 
 
