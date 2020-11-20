@@ -39,14 +39,19 @@ cur_time = datetime.utcnow().time()
 
 def in_time(startTime, endTime):
     """Current Universal Time"""
-    if startTime < endTime:
-        ''' The Current Time falls within the '''
-        return startTime <= cur_time <= endTime
+    h = int(depart_hour.get())
+    if int(depart_hour.get()) == str(cur_time)[:2]:
+        if startTime < endTime:
+            ''' The Current Time falls within the '''
+            return startTime <= cur_time <= endTime
+        else:
+            ''' The 'or' takes into account if the period spans overnight'''
+            return cur_time >= startTime or cur_time <= endTime
     else:
-        ''' The 'or' takes into account if the period spans overnight'''
-        return cur_time >= startTime or cur_time <= endTime
-
-
+        if (5 <= h <= 12) or (12 <= h < 24):
+            return True
+        else:
+            return False
 def confirm():
     global source
     global destination
@@ -90,7 +95,9 @@ def main():
             display_gui(checking_time(str(depart_hour.get()), str(depart_min.get())))
             # gr.display(checking_time(str(depart_hour.get()), str(depart_min.get())))
             ''' Display within the GUI'''
-
+    else:
+        root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file='Photos/lol.gif'))
+        messagebox.showerror("Application not available", "No trians are ruinning at this hour. The train should run between the hours of 5:00am to Midnight")
 
 """ input for starting station"""
 
