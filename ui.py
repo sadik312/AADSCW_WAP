@@ -191,7 +191,7 @@ def checking_time(a, b):
 
 ''' button to confirm station entries'''
 confirm_btn = Button(root, text="Confirm", command=confirm,
-                     bg='white', fg='black', highlightbackground=looks['highlightbackground'])
+                     bg='#bb9b84', fg='black', highlightbackground=looks['highlightbackground'])
 confirm_btn.place(relx=0.5, rely=0.375, anchor=CENTER)
 
 ''' resets entry boxes, but not the station confirmations '''
@@ -210,19 +210,19 @@ def reset():
 """ confirm_label.delete(0, END)"""
 
 reset_btn = Button(root, text="Reset", command=reset,
-                   bg='white', fg='black', highlightbackground=looks['highlightbackground'])
+                   bg='#bb9b84', fg='black', highlightbackground=looks['highlightbackground'])
 reset_btn.place(relx=0.5, rely=0.425, anchor=CENTER)
 
 """ Button that will open up TFL Map"""
 
 
 map_btn = Button(root, text="Map", command=lambda: [webbrowser.open("http://content.tfl.gov.uk/standard-tube-map.pdf")],
-                 bg='white', fg='black', highlightbackground=looks['highlightbackground'])
+                 bg='#bb9b84', fg='black', highlightbackground=looks['highlightbackground'])
 map_btn.place(relx=0.5, rely=0.475, anchor=CENTER)
 
 """ Exit button:"""
 exit_btn = Button(root, text="Exit", command=root.quit,
-                  bg='white', fg='black', highlightbackground=looks['highlightbackground'])
+                  bg='#bb9b84', fg='black', highlightbackground=looks['highlightbackground'])
 exit_btn.place(relx=0.5, rely=0.525, anchor=CENTER)
 
 
