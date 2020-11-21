@@ -259,12 +259,12 @@ def display_gui(time):
         # Label(display, text='{}{}{}{}'.format(' '*5,changes,' '*5, gr.cum_time(cur_time, i[2]))).pack(anchor=W)
         text.insert(END, '{}{}{}{}\n'.format(' ' * 2, changes, ' ' * 2, gr.cum_time(cur_time, i[2])), 'lines')
     '''
-
+    text.tag_configure('Start_end', font=('Arial', 18, 'bold'), foreground = '#4d8b11')
     for i in gr.final:
         if i[1] == temp:
             if i == gr.final[-1]:
-                text.insert(END, i[0] + '\n', 'Main_station')
-                text.insert(END, 'Final time:{}'.format(gr.cum_time(cur_time, i[2])), 'Main_station')
+                text.insert(END, i[0] + '\n', 'Start_end')
+                text.insert(END, 'Final time:{}'.format(gr.cum_time(cur_time, i[2])), 'Start_end')
 
             else:
                 text.insert(END, ' ' * 5, 'stations')
