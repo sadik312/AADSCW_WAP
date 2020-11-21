@@ -270,8 +270,14 @@ def display_gui(time):
                 text.insert(END, ' ' * 5, 'stations')
 
                 for j in i[1]:
-                    text.tag_configure(j, font=('Arial', 15, 'bold'), foreground=colours[j])
-                    text.insert(END,'|', j)
+                    k = j
+                    if j == 'Hammersmith & City':
+                        k = 'Hammersmith_&_City'
+                    if j == 'Waterloo & City':
+                        k = 'Waterloo_&_City'
+
+                    text.tag_configure(k, font=('Arial', 15, 'bold'), foreground=colours[k])
+                    text.insert(END,'|', k)
 
                 text.insert(END, '-{}'.format(i[0]) + '\n', 'stations')
 
@@ -289,7 +295,7 @@ def display_gui(time):
                 if temp1 == i[1][-1]:
                     text.insert(END, ' ' + temp1, '{}'.format(temp1))
                     text.insert(END, ' ' + gr.cum_time(cur_time, i[2]) + '\n', 'bold')
-                elif temp == i[1][0]:
+                elif temp1 == i[1][0]:
                     text.insert(END, ' ' * 7 + temp1 + ',', '{}'.format(temp1))
                 else:
                     text.insert(END, temp1 + ',', '{}'.format(temp1))
