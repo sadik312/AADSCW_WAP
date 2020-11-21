@@ -1,7 +1,5 @@
 from datetime import datetime, time
 from tkinter import *
-from tkinter import font
-from PIL import ImageTk, Image
 from tkinter import messagebox
 import Graph_A_Dijk as gr
 import webbrowser
@@ -232,11 +230,12 @@ def display_gui(time):
     global display
     display = Tk()
     display.title('Route')
+    display.configure(bg='white')
     if len(gr.path) < 20:
         height = 30
     else:
         height = len(gr.path) * 2
-    text = Text(display, height=height, width=60)
+    text = Text(display, height=height, width=60, bg='white')
     text.pack()
 
     Button(display, text='Main page', command=lambda: [text.delete(1.0, END), display.destroy()]).pack()
