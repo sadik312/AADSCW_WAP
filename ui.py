@@ -20,7 +20,7 @@ looks = {'fg': 'white', 'bg': '#916648', 'highlightbackground': '#916648'}
 root = Tk()
 root.title('Route Planner App')
 center_window(800, 500, root)
-photo = PhotoImage(file="Photos/PR.gif")
+photo = PhotoImage(file="Photos/train.gif")
 root.iconphoto(False, photo)
 root.configure(bg=looks['bg'])
 confirm_label = Label(root)
