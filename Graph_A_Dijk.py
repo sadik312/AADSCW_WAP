@@ -95,7 +95,6 @@ def dijkstra(g, src, check):
                     weight = int(g.get_edge_data(u, e)['weight'])
                 ''' Relaxation step on edges (e, u)'''
                 '''is the accumulated value better than d[e]'''
-                
                 if d[u] + weight < d[e]:
                     d[e] = d[u] + weight + 1
                     g.nodes[e]['cum_wg'] = d[e]
