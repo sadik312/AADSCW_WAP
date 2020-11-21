@@ -6,6 +6,7 @@ from tkinter import messagebox
 import Graph_A_Dijk as gr
 import webbrowser
 
+'''calculates and centres the window'''
 def center_window(w, h, frame):
     # get screen width and height
     ws = frame.winfo_screenwidth()
@@ -16,22 +17,25 @@ def center_window(w, h, frame):
     frame.geometry('%dx%d+%d+%d' % (w, h, x, y))
 
 
-looks = {'fg': 'white', 'bg': '#916648', 'highlightbackground': '#916648'}
+looks = {'fg': 'white', 'bg': '#916648', 'highlightbackground': '#916648'} 
+'''holds the aesthetic and configuration of variables'''
 root = Tk()
+'''initialises root window'''
 root.title('Route Planner App')
 center_window(800, 500, root)
 photo = PhotoImage(file="Photos/train.gif")
 root.iconphoto(False, photo)
 root.configure(bg=looks['bg'])
+
+
 confirm_label = Label(root)
 confirm_label1 = Label(root)
 error_label = Label(root)
 
-# func to confirm entered stations
 source = None
 destination = None
 
-
+'''removes spaces and irregularity in station names'''
 def words(string):
     if " " in string:
         newText = ''
@@ -45,10 +49,11 @@ def words(string):
     else:
         return string.capitalize()
 
-
+'''refers to the current time'''
 cur_time = datetime.utcnow().time()
 
 
+'''checks inputted time and returns boolean depending on the conditional set time for the app'''
 def in_time(startTime, endTime):
     """Current Universal Time"""
     h = int(depart_hour.get())
@@ -65,7 +70,7 @@ def in_time(startTime, endTime):
         else:
             return False
 
-
+'''func to initialise and process the entered stations'''
 def confirm():
     global source
     global destination
@@ -78,6 +83,7 @@ def confirm():
     error_label.destroy()
     time_label.destroy()
 
+    '''checks if the inputted values are in the correct form'''
     def validation(a, b):
         try:
             int(a)
@@ -88,6 +94,7 @@ def confirm():
 
     source = words(src_input.get().lower().strip())
     destination = words(des_input.get().lower().strip())
+    '''conditionals to check if the inputted values match the wanted format and error handling'''
     if source != destination:
         if validation(depart_hour.get(), depart_min.get()):
             if (0 <= int(depart_hour.get()) <= 23) and (0 <= int(depart_min.get()) <= 59):
@@ -102,7 +109,8 @@ def confirm():
                                                bg=looks['bg'], fg=looks['fg'],
                                                highlightbackground=looks['highlightbackground'])
                         confirm_label1.pack()
-                        main()
+                        '''initialises the main function'''
+                        main() 
                     else:
                         error_label = Label(root, text="Destination not found",
                                             bg=looks['bg'], fg=looks['fg'],
@@ -139,7 +147,7 @@ def main():
             messagebox.showerror("Incorrect Time", "Entered time is not valid")
         else:
             display_gui(checking_time(str(depart_hour.get()), str(depart_min.get())))
-            # gr.display(checking_time(str(depart_hour.get()), str(depart_min.get())))
+            '''gr.display(checking_time(str(depart_hour.get()), str(depart_min.get())))'''
             ''' Display within the GUI'''
     else:
         root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file='Photos/lol.gif'))
@@ -164,6 +172,7 @@ time_label.place(relx=0.5, rely=0.25, anchor=CENTER)
 collon = Label(root, text=":", bg=looks['bg'], fg=looks['fg'], highlightbackground=looks['highlightbackground'])
 collon.place(relx=0.5, rely=0.3, anchor=CENTER)
 
+'''depart_hour & depart_min are the entered departure time'''
 depart_hour = Entry(root, width=2, bg=looks['bg'], fg=looks['fg'], highlightbackground=looks['highlightbackground'])
 depart_hour.insert(0, str(cur_time)[:2])
 depart_hour.place(relx=0.48, rely=0.3, anchor=CENTER)
@@ -172,7 +181,7 @@ depart_min = Entry(root, width=2, bg=looks['bg'], fg=looks['fg'], highlightbackg
 depart_min.insert(0, str(cur_time)[3:5])
 depart_min.place(relx=0.52, rely=0.3, anchor=CENTER)
 
-
+'''checks if the inputted time are in the correct time bound'''
 def checking_time(a, b):
     if (0 <= int(a) < 24) & (0 <= int(b) < 60):
         return '{}:{}'.format(a, b)
@@ -180,14 +189,14 @@ def checking_time(a, b):
         return False
 
 
-""" button to confirm station entries"""
+''' button to confirm station entries'''
 confirm_btn = Button(root, text="Confirm", command=confirm,
-                     bg=looks['bg'], fg='black', highlightbackground=looks['highlightbackground'])
+                     bg='white', fg='black', highlightbackground=looks['highlightbackground'])
 confirm_btn.place(relx=0.5, rely=0.375, anchor=CENTER)
 
-""" resets entry boxes, but not the station confirmations (can't seem to get that to work)"""
+''' resets entry boxes, but not the station confirmations '''
 
-
+'''resets entry fields for starting & destination stations'''
 def reset():
     src_input.delete(0, END)
     des_input.delete(0, END)
@@ -201,31 +210,23 @@ def reset():
 """ confirm_label.delete(0, END)"""
 
 reset_btn = Button(root, text="Reset", command=reset,
-                   bg=looks['bg'], fg='black', highlightbackground=looks['highlightbackground'])
+                   bg='white', fg='black', highlightbackground=looks['highlightbackground'])
 reset_btn.place(relx=0.5, rely=0.425, anchor=CENTER)
 
 """ Button that will open up TFL Map"""
 
 
-def map_page():
-    global map_img
-    map_tab = Toplevel()
-    map_tab.title("TFL Map")
-    map_img = ImageTk.PhotoImage(Image.open("london_underground_map.png"))
-    map_label = Label(map_tab, image=map_img)
-    map_label.pack()
-
-
 map_btn = Button(root, text="Map", command=lambda: [webbrowser.open("http://content.tfl.gov.uk/standard-tube-map.pdf")],
-                 bg=looks['bg'], fg='black', highlightbackground=looks['highlightbackground'])
+                 bg='white', fg='black', highlightbackground=looks['highlightbackground'])
 map_btn.place(relx=0.5, rely=0.475, anchor=CENTER)
 
 """ Exit button:"""
 exit_btn = Button(root, text="Exit", command=root.quit,
-                  bg=looks['bg'], fg='black', highlightbackground=looks['highlightbackground'])
+                  bg='white', fg='black', highlightbackground=looks['highlightbackground'])
 exit_btn.place(relx=0.5, rely=0.525, anchor=CENTER)
 
 
+'''func for displaying the result after confirming stations'''
 def display_gui(time):
     gr.final = []
     global display
@@ -247,19 +248,15 @@ def display_gui(time):
     text.tag_configure('bold', font=('Arial', 14, 'bold'))
     text.tag_configure('stations', font=('Arial', 14,))
 
+    '''hex values representing colours for the station lines'''
     colours = {'Bakerloo': '#B36305', 'Central': '#E32017', 'Circle': '#FFD300', 'District': '#00782A',
                'Hammersmith_&_City': '#F3A9BB', 'Jubilee': '#A0A5A9', 'Metropolitan': '#9B0056', 'Northern': '#000000',
                'Piccadilly': '#003688', 'Victoria': '#0098D4', 'Waterloo_&_City': '#95CDBA'}
 
-    '''      
-            if changes is None:
-                changes = lines
-            else:
-                changes = changes + ', ' + lines
-        # Label(display, text='{}{}{}{}'.format(' '*5,changes,' '*5, gr.cum_time(cur_time, i[2]))).pack(anchor=W)
-        text.insert(END, '{}{}{}{}\n'.format(' ' * 2, changes, ' ' * 2, gr.cum_time(cur_time, i[2])), 'lines')
-    '''
+    
     text.tag_configure('Start_end', font=('Arial', 18, 'bold'), foreground = '#4d8b11')
+
+    '''for loop iterates through list final to print out all the stations in order in the text widget'''
     for i in gr.final:
         if i[1] == temp:
             if i == gr.final[-1]:

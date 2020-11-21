@@ -1,7 +1,7 @@
 import csv
 
 '''Node that will hold data and pointer for the linkled list. Initially the pointer are set to None 
-   and are changed as new nodes are added. Prev and next for previous and next pointer respectively'''
+   and are changed as new nodes are added. 'Prev' and 'next' for previous and next pointer respectively'''
 
 
 class Node:
@@ -16,7 +16,7 @@ class Node:
 
 
 class Doubly_linked_List:
-    """The starting node is start_node where initially is assigned None when the list is empty"""
+    """The starting node is start_node which initially is assigned as None when the list is empty"""
 
     def __init__(self):
         self.start_node = None
@@ -172,8 +172,8 @@ class Doubly_linked_List:
 
 """
 Creating instances of linked list for each line
-This can also be attached to a button on the gui to make it more elegant
 """
+
 Bakerloo = Doubly_linked_List()
 Central = Doubly_linked_List()
 Circle = Doubly_linked_List()
@@ -194,7 +194,7 @@ line = {'Bakerloo': Bakerloo, 'Central': Central,
         'Northern': Northern, 'Piccadilly': Piccadilly,
         'Victoria': Victoria, 'Waterloo & City': Waterloo_A_City}
 
-'''This function reads the excel file in csv format and crates classes and nodes accordingly.
+'''This function reads the excel file in csv format and creates classes and nodes accordingly.
     It relies on the list dictonary to get the individual tube lines and assign stations to them
 '''
 
@@ -203,7 +203,7 @@ def create(file):
     f = open(file)
     reader = csv.reader(f, delimiter=',')
     _temp = next(reader)
-    '''The temp variable is need to keep track of the previous line read, iniitally it is set as the first line.
+    '''The temp variable is needed to keep track of the previous line read, iniitally it is set as the first line.
         previous read line is needed to compare with the current line and add the last station for each tube line'''
     for row in reader:
         if row[3] != '':
@@ -213,11 +213,9 @@ def create(file):
                 line[row[0]].inserting_at_start(row)
             else:
                 line[row[0]].inserting_at_end(row)
-            """Ignore this : cond = (temp[2] != row[1] and temp[2] != '') and row[1] == temp[1]"""
             _cond = (_temp[2] != row[1] and _temp[2] != '')
             """Cond is used to get resolve either TRUE or FALSE for the next if statement """
             if _cond:
-                #line[_temp[0]].inserting_at_end(_temp)
                 pass
             _temp = row
             """Assigning the current row to _temp"""
