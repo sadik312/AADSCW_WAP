@@ -301,5 +301,5 @@ def display_gui(time):
                     text.insert(END, temp1 + ',', '{}'.format(temp1))
         temp = i[1]
 
-
+    text.configure(state="disabled")
 mainloop()
