@@ -149,7 +149,7 @@ def main():
             ''' Display within the GUI'''
     else:
         root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file='Photos/lol.gif'))
-        messagebox.showerror("Application not available", "No trians are ruinning at this hour. The train should run "
+        messagebox.showerror("Application not available", "No trains are running at this hour. The train runs "
                                                           "between the hours of 5:00am to Midnight")
 
 
