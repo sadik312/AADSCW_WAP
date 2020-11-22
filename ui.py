@@ -5,6 +5,8 @@ import Graph_A_Dijk as gr
 import webbrowser
 
 '''calculates and centres the window'''
+
+
 def center_window(w, h, frame):
     # get screen width and height
     ws = frame.winfo_screenwidth()
@@ -15,7 +17,7 @@ def center_window(w, h, frame):
     frame.geometry('%dx%d+%d+%d' % (w, h, x, y))
 
 
-looks = {'fg': 'white', 'bg': '#916648', 'highlightbackground': '#916648'} 
+looks = {'fg': 'white', 'bg': '#916648', 'highlightbackground': '#916648'}
 '''holds the aesthetic and configuration of variables'''
 root = Tk()
 '''initialises root window'''
@@ -25,7 +27,6 @@ photo = PhotoImage(file="Photos/train.gif")
 root.iconphoto(False, photo)
 root.configure(bg=looks['bg'])
 
-
 confirm_label = Label(root)
 confirm_label1 = Label(root)
 error_label = Label(root)
@@ -34,6 +35,8 @@ source = None
 destination = None
 
 '''removes spaces and irregularity in station names'''
+
+
 def words(string):
     if " " in string:
         newText = ''
@@ -47,11 +50,13 @@ def words(string):
     else:
         return string.capitalize()
 
+
 '''refers to the current time'''
 cur_time = datetime.utcnow().time()
 
-
 '''checks inputted time and returns boolean depending on the conditional set time for the app'''
+
+
 def in_time(startTime, endTime):
     """Current Universal Time"""
     h = int(depart_hour.get())
@@ -68,7 +73,10 @@ def in_time(startTime, endTime):
         else:
             return False
 
+
 '''func to initialise and process the entered stations'''
+
+
 def confirm():
     global source
     global destination
@@ -82,6 +90,7 @@ def confirm():
     time_label.destroy()
 
     '''checks if the inputted values are in the correct form'''
+
     def validation(a, b):
         try:
             int(a)
@@ -108,7 +117,7 @@ def confirm():
                                                highlightbackground=looks['highlightbackground'])
                         confirm_label1.pack()
                         '''initialises the main function'''
-                        main() 
+                        main()
                     else:
                         error_label = Label(root, text="Destination not found",
                                             bg=looks['bg'], fg=looks['fg'],
@@ -180,6 +189,8 @@ depart_min.insert(0, str(cur_time)[3:5])
 depart_min.place(relx=0.52, rely=0.3, anchor=CENTER)
 
 '''checks if the inputted time are in the correct time bound'''
+
+
 def checking_time(a, b):
     if (0 <= int(a) < 24) & (0 <= int(b) < 60):
         return '{}:{}'.format(a, b)
@@ -195,6 +206,8 @@ confirm_btn.place(relx=0.5, rely=0.375, anchor=CENTER)
 ''' resets entry boxes, but not the station confirmations '''
 
 '''resets entry fields for starting & destination stations'''
+
+
 def reset():
     src_input.delete(0, END)
     des_input.delete(0, END)
@@ -213,7 +226,6 @@ reset_btn.place(relx=0.5, rely=0.425, anchor=CENTER)
 
 """ Button that will open up TFL Map"""
 
-
 map_btn = Button(root, text="Map", command=lambda: [webbrowser.open("http://content.tfl.gov.uk/standard-tube-map.pdf")],
                  bg='#bb9b84', fg='black', highlightbackground=looks['highlightbackground'])
 map_btn.place(relx=0.5, rely=0.475, anchor=CENTER)
@@ -224,78 +236,92 @@ exit_btn = Button(root, text="Exit", command=root.quit,
 exit_btn.place(relx=0.5, rely=0.525, anchor=CENTER)
 
 
+def cheack_after(a):
+    if 0 <= a <= 5:
+        return True
+    else:
+        return False
+
+
 '''func for displaying the result after confirming stations'''
+
+
 def display_gui(time):
     gr.final = []
-    global display
-    display = Tk()
-    display.title('Route')
-    display.configure(bg='white')
-    if len(gr.path) < 20:
-        height = 30
-    else:
-        height = len(gr.path) * 2
-    text = Text(display, height=height, width=60, bg='white')
-    text.pack()
-
-    Button(display, text='Main page', command=lambda: [text.delete(1.0, END), display.destroy()]).pack()
-    cur_time = time
     gr.path_finder()
-    temp = gr.final[1]
+    cur_time = time
+    test = int(gr.cum_time(cur_time, gr.final[-1][2])[:2])
+    if 0 <= test <= 5:
+        messagebox.showerror("Out of bound Time", "Trains would not run to complete your journey")
+    else:
+        global display
+        display = Tk()
+        display.title('Route')
+        display.configure(bg='white')
+        if len(gr.path) < 20:
+            height = 30
+        else:
+            height = len(gr.path) * 2
+        text = Text(display, height=height, width=60, bg='white')
+        text.pack()
 
-    text.tag_configure('Main_station', font=('Arial', 18, 'bold'))
-    text.tag_configure('bold', font=('Arial', 14, 'bold'))
-    text.tag_configure('stations', font=('Arial', 14,))
+        Button(display, text='Main page', command=lambda: [text.delete(1.0, END), display.destroy()]).pack()
 
-    '''hex values representing colours for the station lines'''
-    colours = {'Bakerloo': '#B36305', 'Central': '#E32017', 'Circle': '#FFD300', 'District': '#00782A',
-               'Hammersmith_&_City': '#F3A9BB', 'Jubilee': '#A0A5A9', 'Metropolitan': '#9B0056', 'Northern': '#000000',
-               'Piccadilly': '#003688', 'Victoria': '#0098D4', 'Waterloo_&_City': '#95CDBA'}
+        temp = gr.final[1]
 
-    
-    text.tag_configure('Start_end', font=('Arial', 18, 'bold'), foreground = '#4d8b11')
+        text.tag_configure('Main_station', font=('Arial', 18, 'bold'))
+        text.tag_configure('bold', font=('Arial', 14, 'bold'))
+        text.tag_configure('stations', font=('Arial', 14,))
 
-    '''for loop iterates through list final to print out all the stations in order in the text widget'''
-    for i in gr.final:
-        if i[1] == temp:
-            if i == gr.final[-1]:
-                text.insert(END, i[0] + '\n', 'Start_end')
-                text.insert(END, 'Final time:{}'.format(gr.cum_time(cur_time, i[2])), 'Start_end')
+        '''hex values representing colours for the station lines'''
+        colours = {'Bakerloo': '#B36305', 'Central': '#E32017', 'Circle': '#FFD300', 'District': '#00782A',
+                   'Hammersmith_&_City': '#F3A9BB', 'Jubilee': '#A0A5A9', 'Metropolitan': '#9B0056', 'Northern': '#000000',
+                   'Piccadilly': '#003688', 'Victoria': '#0098D4', 'Waterloo_&_City': '#95CDBA'}
+
+        text.tag_configure('Start_end', font=('Arial', 18, 'bold'), foreground='#4d8b11')
+        '''for loop iterates through list final to print out all the stations in order in the text widget'''
+        for i in gr.final:
+            if i[1] == temp:
+                if i == gr.final[-1]:
+                    text.insert(END, i[0] + '\n', 'Start_end')
+                    text.insert(END, 'Final time:{}'.format(gr.cum_time(cur_time, i[2])), 'Start_end')
+
+                else:
+                    text.insert(END, ' ' * 5, 'stations')
+
+                    for j in i[1]:
+                        k = j
+                        if j == 'Hammersmith & City':
+                            k = 'Hammersmith_&_City'
+                        if j == 'Waterloo & City':
+                            k = 'Waterloo_&_City'
+
+                        text.tag_configure(k, font=('Arial', 15, 'bold'), foreground=colours[k])
+                        text.insert(END, '|', k)
+
+                    text.insert(END, '-{}'.format(i[0]) + '\n', 'stations')
 
             else:
-                text.insert(END, ' ' * 5, 'stations')
 
-                for j in i[1]:
-                    k = j
-                    if j == 'Hammersmith & City':
-                        k = 'Hammersmith_&_City'
-                    if j == 'Waterloo & City':
-                        k = 'Waterloo_&_City'
+                text.insert(END, i[0] + '\n', 'Main_station')
+                for lines in i[1]:
+                    temp1 = lines
+                    if lines == 'Hammersmith & City':
+                        temp1 = 'Hammersmith_&_City'
+                    if lines == 'Waterloo & City':
+                        temp1 = 'Waterloo_&_City'
 
-                    text.tag_configure(k, font=('Arial', 15, 'bold'), foreground=colours[k])
-                    text.insert(END,'|', k)
+                    text.tag_configure(temp1, font=('Arial', 15, 'bold'), foreground=colours[temp1])
+                    if temp1 == i[1][-1]:
+                        text.insert(END, ' ' + temp1, '{}'.format(temp1))
+                        text.insert(END, ' ' + gr.cum_time(cur_time, i[2]) + '\n', 'bold')
+                    elif temp1 == i[1][0]:
+                        text.insert(END, ' ' * 7 + temp1 + ',', '{}'.format(temp1))
+                    else:
+                        text.insert(END, temp1 + ',', '{}'.format(temp1))
+            temp = i[1]
 
-                text.insert(END, '-{}'.format(i[0]) + '\n', 'stations')
+        text.configure(state="disabled")
 
-        else:
 
-            text.insert(END, i[0] + '\n', 'Main_station')
-            for lines in i[1]:
-                temp1 = lines
-                if lines == 'Hammersmith & City':
-                    temp1 = 'Hammersmith_&_City'
-                if lines == 'Waterloo & City':
-                    temp1 = 'Waterloo_&_City'
-
-                text.tag_configure(temp1, font=('Arial', 15, 'bold'), foreground=colours[temp1])
-                if temp1 == i[1][-1]:
-                    text.insert(END, ' ' + temp1, '{}'.format(temp1))
-                    text.insert(END, ' ' + gr.cum_time(cur_time, i[2]) + '\n', 'bold')
-                elif temp1 == i[1][0]:
-                    text.insert(END, ' ' * 7 + temp1 + ',', '{}'.format(temp1))
-                else:
-                    text.insert(END, temp1 + ',', '{}'.format(temp1))
-        temp = i[1]
-
-    text.configure(state="disabled")
 mainloop()

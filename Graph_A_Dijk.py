@@ -13,7 +13,8 @@ def creating_graph(g):
 		adding edges by iterating through every node in the line"""
     ''' line = list'''
     for i in dl.line:
-        ''' if statement used to check if node already in graph if True, would mean node already in graph so line is appended '''
+        '''if statement used to check if node already in graph if True, would mean node already in graph so line is 
+        appended '''
         if dl.line[i].start_node.item[1].strip() in g.nodes():
             if i not in g.nodes[dl.line[i].start_node.item[1].strip()]['line']:
                 g.nodes[dl.line[i].start_node.item[1].strip()]['line'].append(i)
