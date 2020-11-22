@@ -235,14 +235,6 @@ exit_btn = Button(root, text="Exit", command=root.quit,
                   bg='#bb9b84', fg='black', highlightbackground=looks['highlightbackground'])
 exit_btn.place(relx=0.5, rely=0.525, anchor=CENTER)
 
-
-def cheack_after(a):
-    if 0 <= a <= 5:
-        return True
-    else:
-        return False
-
-
 '''func for displaying the result after confirming stations'''
 
 
